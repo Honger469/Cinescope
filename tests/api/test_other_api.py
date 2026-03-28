@@ -58,6 +58,7 @@ class TestBookingsNegative:
         ("totalprice", "MISSING"),  # ключ удален
         ("firstname", "MISSING")   # ключ удален
     ])
+    
     def test_negative(self, auth_session, booking_data_factory, field, value):
         data = booking_data_factory()
 
