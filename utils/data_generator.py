@@ -5,7 +5,7 @@ faker = Faker()
 
 class DataGenerator:
     
-     @staticmethod
+    @staticmethod
     def generate_random_email():
         random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
         return f"kek{random_string}@gmail.com"

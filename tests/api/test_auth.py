@@ -24,4 +24,3 @@ class TestAuthAPI:
 
         # Проверяем, что роль USER назначена по умолчанию
         assert "USER" in response_data["roles"], "Роль USER должна быть у пользователя"
-"
