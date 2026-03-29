@@ -19,12 +19,16 @@ class CustomRequester:
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
 
-    def send_request(self, method, endpoint, data=None, expected_status=200, need_logging=True):
+    def send_request(self, method, endpoint, data=None, expected_status={200}, need_logging=True):
         url = f"{self.base_url}{endpoint}"
         response = self.session.request(method, url, json=data)
         if need_logging:
             self.log_request_and_response(response)
-        if response.status_code != expected_status:
+
+        if isinstance(expected_status, int):
+            expected_status = {expected_status}
+
+        if response.status_code not in expected_status:
             raise ValueError(f"Unexpected status code: {response.status_code}. Expected: {expected_status}")
         return response
 

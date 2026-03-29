@@ -33,7 +33,9 @@ def registered_user(requester, test_user):
         method="POST",
         endpoint=REGISTER_ENDPOINT,
         data=test_user,
-        expected_status=201
+        expected_status={
+            201
+        }
     )
     response_data = response.json()
     registered_user = test_user.copy()

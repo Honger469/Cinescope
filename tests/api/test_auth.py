@@ -1,86 +1,77 @@
 import pytest
-import requests
-
-from conftest import test_user
-from constants import BASE_URL, HEADERS, REGISTER_ENDPOINT, LOGIN_ENDPOINT
+from constants import REGISTER_ENDPOINT, LOGIN_ENDPOINT
 
 
 class TestAuthAPI:
-    def test_reg_auth_user(self, test_user):
+    def test_register_user(self, requester, test_user):
+        """
+        Тест на регистрацию пользователя.
+        """
+        response = requester.send_request(
+            method="POST",
+            endpoint=REGISTER_ENDPOINT,
+            data=test_user,
+            expected_status={
+                200, 201
+            }
+        )
+        response_data = response.json()
+        assert response_data["email"] == test_user["email"], "Email не совпадает"
+        assert "id" in response_data, "ID пользователя отсутствует в ответе"
+        assert "roles" in response_data, "Роли пользователя отсутствуют в ответе"
+        assert "USER" in response_data["roles"], "Роль USER должна быть у пользователя"
 
-        # URL для регистрации
-        register_url = f"{BASE_URL}{REGISTER_ENDPOINT}"
+    def test_register_and_login_user(self, requester, registered_user):
+        """
+        Тест на регистрацию и авторизацию пользователя.
+        """
+        login_data = {
+            "email": registered_user["email"],
+            "password": registered_user["password"]
+        }
+        response = requester.send_request(
+            method="POST",
+            endpoint=LOGIN_ENDPOINT,
+            data=login_data,
+            expected_status={
+                201
+            }
+        )
+        response_data = response.json()
+        assert "accessToken" in response_data, "Токен доступа отсутствует в ответе"
+        assert response_data["user"]["email"] == registered_user["email"], "Email не совпадает"
 
-        # Отправка запроса на регистрацию
-        response = requests.post(register_url, json=test_user, headers=HEADERS)
 
-        # Логируем ответ для диагностики
-        print(f"Response status: {response.status_code}")
-        print(f"Response body: {response.text}")
+class TestAuthAPINegative:
+    @pytest.mark.parametrize("field,value", [
+        ("email", "abc123321"),  # несуществующий эмейл
+        ("password", "abc123321"),  # неверный пароль
+        ("password", "MISSING")  # не передан эмейл
+    ])
 
-        # Проверки
-        assert response.status_code == 201, "Ошибка регистрации пользователя"
-        response_reg = response.json()
-        assert response_reg["email"] == test_user["email"], "Email не совпадает"
-        assert "id" in response_reg, "ID пользователя отсутствует в ответе"
-        assert "roles" in response_reg, "Роли пользователя отсутствуют в ответе"
-
-        # Проверяем, что роль USER назначена по умолчанию
-        assert "USER" in response_reg["roles"], "Роль USER должна быть у пользователя"
-
-        # URL для авторизации
-        auth_url = f"{BASE_URL}{LOGIN_ENDPOINT}"
+    def test_reg_auth_user_negative(self, requester, test_user, field, value):
+        print(f"\n\nНегативная проверка. Поле {field}={value}:")
 
         data_auth = {
-            "email": response_reg["email"],
+            "email": test_user["email"],
             "password": test_user["password"]
         }
-        # Отправка запроса на авторизацию
-        response_auth = requests.post(auth_url, json=data_auth, headers=HEADERS)
 
+        if value == "MISSING":
+            data_auth.pop(field, None)  # удаляем ключ из словаря
+        else:
+            data_auth[field] = value  # изменяем или оставляем None
+
+        # Отправка запроса на авторизацию
+        response_auth = requester.send_request(
+            method="POST",
+            endpoint=LOGIN_ENDPOINT,
+            data=data_auth,
+            expected_status={
+                401, 500
+            }
+        )
         # Логируем ответ для диагностики
         print(f"Response status: {response_auth.status_code}")
         print(f"Response body: {response_auth.text}")
 
-        # Проверки
-        response_auth_json = response_auth.json()
-        assert response_auth.status_code in (200, 201), "Ошибка авторизации пользователя"
-        assert response_auth_json.get("accessToken"), "Токен не возвращён"
-        # assert response_auth_json.get("email") is not None, "Email не возвращён после авторизации"
-        # assert response_auth_json.get("email") == response_reg["email"], "Email не совпадает"
-
-
-    class TestAuthAPINegative:
-        @pytest.mark.parametrize("field,value", [
-            ("email", "abc123321"),  # несуществующий эмейл
-            ("password", "abc123321"),  # неверный пароль
-            ("password", "MISSING")  # не передан эмейл
-        ])
-
-        def test_reg_auth_user_negative(self, test_user, field, value):
-            # URL для авторизации
-            auth_url = f"{BASE_URL}{LOGIN_ENDPOINT}"
-
-            data_auth = {
-                "email": test_user["email"],
-                "password": test_user["password"]
-            }
-
-            if value == "MISSING":
-                data_auth.pop(field, None)  # удаляем ключ из словаря
-            else:
-                data_auth[field] = value  # изменяем или оставляем None
-
-            # Отправка запроса на авторизацию
-            response_auth = requests.post(auth_url, json=data_auth, headers=HEADERS)
-
-            # Логируем ответ для диагностики
-            print(f"Response status: {response_auth.status_code}")
-            print(f"Response body: {response_auth.text}")
-
-            # Проверки
-            print(f"Проверка поля {field}={value}: статус {response_auth.status_code}")
-
-            message = response_auth.json().get("message")
-            assert message, "Поле 'message' отсутствует или пустое в ответе"
-            assert response_auth.status_code in (400, 401, 500)
