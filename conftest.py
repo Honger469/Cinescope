@@ -47,6 +47,18 @@ def test_user():
         "passwordRepeat": random_password,
         "roles": ["USER"]
     }
+
+@pytest.fixture()
+def admin_api(api_manager_auth):
+    """
+    Аутентификация под админом для получения нужных прав, если они нужны для теста
+    """
+    admin_email = "api1@gmail.com"
+    admin_password = "asdqwe123Q"
+
+    api_manager_auth.auth_api.authenticate(admin_email, admin_password)
+    return api_manager_auth
+
 @pytest.fixture()
 def test_poster():
     """
@@ -64,6 +76,15 @@ def test_poster():
         "published": True,
         "genreId": 1,
     }
+
+@pytest.fixture()
+def authorized_user(api_manager_auth, registered_user):
+    api_manager_auth.auth_api.authenticate(
+        registered_user["email"],
+        registered_user["password"]
+    )
+    return registered_user
+
 @pytest.fixture(scope="session")
 def test_movie():
     """

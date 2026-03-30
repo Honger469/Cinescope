@@ -31,6 +31,7 @@ class MoviesAPI(CustomRequester):
         """
         return self.send_request(
             method="POST",
+            base_url=BASE_URL_MOVIES,
             endpoint=MOVIE_ENDPOINT,
             data=movies_data,
             expected_status=expected_status

@@ -23,6 +23,21 @@ class UserAPI(CustomRequester):
             expected_status=expected_status
         )
 
+    def change_user(self, user_id, new_data = None, expected_status=200):
+        """
+        Получение информации о пользователе.
+        :param user_id: ID пользователя.
+        :param expected_status: Ожидаемый статус-код.
+        :param new_data: На что меняются данные
+        """
+        return self.send_request(
+            method="PATCH",
+            base_url=BASE_URL_AUTH,
+            endpoint=f"/user/{user_id}",
+            data=new_data,
+            expected_status=expected_status
+        )
+
     def delete_user(self, user_id, expected_status=204):
         """
         Удаление пользователя.

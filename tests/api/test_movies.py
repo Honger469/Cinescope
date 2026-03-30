@@ -41,3 +41,10 @@ class TestMoviesAPINegative:
 
         expected_status = 400  # Важно! Ожидаемый статус-код
         api_manager_movies.movies_api.get_poster_movie(data, expected_status)
+
+'''  ддя фикстуры
+api_manager_auth.auth_api.authenticate(
+    registered_user["email"],
+    registered_user["password"]
+)
+'''
