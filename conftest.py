@@ -3,7 +3,7 @@ import pytest
 import requests
 from constants import BASE_URL, REGISTER_ENDPOINT, LOGIN_ENDPOINT
 from custom_requester.custom_requester import CustomRequester
-from tests.api.api_manager import ApiManager
+from tests.api.api_manager import ApiManagerAuth, ApiManagerMovies
 from utils.data_generator import DataGenerator
 
 faker = Faker()
@@ -18,11 +18,18 @@ def session():
     http_session.close()
 
 @pytest.fixture(scope="session")
-def api_manager(session):
+def api_manager_auth(session):
     """
-    Фикстура для создания экземпляра ApiManager.
+    Фикстура для создания экземпляра ApiManagerAuth.
     """
-    return ApiManager(session)
+    return ApiManagerAuth(session)
+
+@pytest.fixture(scope="session")
+def api_manager_movies(session):
+    """
+    Фикстура для создания экземпляра ApiManagerAuth.
+    """
+    return ApiManagerMovies(session)
 
 @pytest.fixture(scope="session")
 def test_user():
@@ -40,6 +47,11 @@ def test_user():
         "passwordRepeat": random_password,
         "roles": ["USER"]
     }
+def poster_data():
+    pass
+
+def movies_data():
+    pass
 
 @pytest.fixture(scope="session")
 def registered_user(requester, test_user):
@@ -50,9 +62,7 @@ def registered_user(requester, test_user):
         method="POST",
         endpoint=REGISTER_ENDPOINT,
         data=test_user,
-        expected_status={
-            201
-        }
+        expected_status=201
     )
     response_data = response.json()
     registered_user = test_user.copy()
