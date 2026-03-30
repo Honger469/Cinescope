@@ -1,5 +1,5 @@
 # constants.py
-BASE_URL_AUTH = "https://auth.dev-cinescope.coconutqa.ru/"
+BASE_URL_AUTH = "https://auth.dev-cinescope.coconutqa.ru"
 BASE_URL_MOVIES = "https://api.dev-cinescope.coconutqa.ru"
 
 HEADERS = {

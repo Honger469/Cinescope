@@ -1,6 +1,5 @@
 import random
 import string
-import time
 
 from faker import Faker
 faker = Faker()
@@ -39,6 +38,7 @@ class DataGenerator:
         password = list(letters + digits + remaining_chars)
         random.shuffle(password)
 
+        return ''.join(password)
 
     @staticmethod
     def generate_random_page():

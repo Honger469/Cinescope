@@ -33,12 +33,11 @@ class TestAuthAPI:
         assert "accessToken" in response_data, "Токен доступа отсутствует в ответе"
         assert response_data["user"]["email"] == registered_user["email"], "Email не совпадает"
 
-class TestBookingsNegative:
+class TestAuthNegative:
     json = {"username": "admin", "password": "password123"}
 
     @pytest.mark.parametrize("field,value", [
         ("email", "abc"),  # некорректный email
-        ("firstname", ""),  # пустая строка
         ("fullName", ""),  # пустая строка
         ("password", None),  # ключ есть, но значение None
     ])
