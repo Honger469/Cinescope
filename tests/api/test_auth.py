@@ -34,23 +34,44 @@ class TestAuthAPI:
         assert response_data["user"]["email"] == registered_user["email"], "Email не совпадает"
 
 class TestAuthNegative:
-    json = {"username": "admin", "password": "password123"}
 
-    @pytest.mark.parametrize("field,value", [
+    @pytest.mark.parametrize("field_register, value_register", [
         ("email", "abc"),  # некорректный email
         ("fullName", ""),  # пустая строка
         ("password", None),  # ключ есть, но значение None
     ])
-    def test_negative(self, api_manager_auth: ApiManagerAuth, test_user, field, value):
+    def test_negative_register(self, api_manager_auth: ApiManagerAuth, test_user, field_register, value_register):
         data = test_user
 
-        if value == "MISSING":
-            data.pop(field, None)  # удаляем ключ из словаря
+        if value_register == "MISSING":
+            data.pop(field_register, None)  # удаляем ключ из словаря
         else:
-            data[field] = value  # изменяем или оставляем None
+            data[field_register] = value_register  # изменяем или оставляем None
 
-        print(f"\nНегативный тест. Проверка поля {field}={value}")
+        print(f"\nНегативный тест. Проверка поля {field_register}={value_register}")
 
         expected_status = 400   # Важно! Ожидаемый статус-код
-        response = api_manager_auth.auth_api.register_user(test_user, expected_status)
+        api_manager_auth.auth_api.register_user(test_user, expected_status)
+
+    @pytest.mark.parametrize("field_auth, value_auth", [
+        ("email", "abc"),  # некорректный email
+        ("email", ""),  # пустая строка
+        ("password", "1"),  # неверный пароль
+        ("password", ""),  # пустая строка
+    ])
+    def test_negative_auth(self, api_manager_auth: ApiManagerAuth, registered_user, field_auth, value_auth):
+        login_data = {
+            "email": registered_user["email"],
+            "password": registered_user["password"]
+        }
+
+        if value_auth == "MISSING":
+            login_data.pop(field_auth, None)  # удаляем ключ из словаря
+        else:
+            login_data[field_auth] = value_auth  # изменяем или оставляем None
+
+        print(f"\nНегативный тест. Проверка поля {field_auth}={value_auth}")
+
+        expected_status = 401   # Важно! Ожидаемый статус-код
+        api_manager_auth.auth_api.login_user(login_data, expected_status)
 
