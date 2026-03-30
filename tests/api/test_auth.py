@@ -41,10 +41,14 @@ class TestAuthAPI:
         new_verified = True
         new_banned = False
         new_data = {"verified": new_verified, "banned": new_banned}
+
         response = admin_api.user_api.change_user(user_id, new_data, expected_status=200)
         assert response.json()["verified"] is new_verified, "Статус верификации не изменился"
         assert response.json()["banned"] is new_banned, "Статус banned не изменился"
 
+'''
+                        Негативные тесты:
+'''
 class TestAuthNegative:
     @pytest.mark.parametrize("field_register, value_register", [
         ("email", "abc"),  # некорректный email
@@ -91,6 +95,6 @@ class TestAuthNegative:
     def test_negative_change_user(self, api_manager_auth, authorized_user, registered_user):
         print(f"\nНегативный тест. Попытка изменения пользователя без соответствующих прав")
         user_id = registered_user["id"]
-        new_data = {"verified": True, "blocked": False}
+        new_data = {"verified": True, "banned": False}
         api_manager_auth.user_api.change_user(user_id, new_data, expected_status=403)
 

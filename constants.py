@@ -9,4 +9,5 @@ HEADERS = {
 
 LOGIN_ENDPOINT = "/login"
 REGISTER_ENDPOINT = "/register"
+LOGOUT_ENDPOINT = "/logout"
 MOVIE_ENDPOINT = "/movies"

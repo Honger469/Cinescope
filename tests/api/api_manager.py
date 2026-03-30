@@ -27,4 +27,5 @@ class ApiManagerMovies:
         """
         self.session = session
         self.movies_api = MoviesAPI(session)
+        self.auth_api = AuthAPI(session)
 

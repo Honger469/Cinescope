@@ -12,6 +12,8 @@ class TestMoviesAPI:
         # Проверяем, что ключ 'movies' есть
         assert "movies" in response_data, "Ключ 'movies' отсутствует в ответе"
 
+        # Сначала делаем logout
+        api_manager_movies.auth_api.logout()  # выход из аккаунта
         # Если хотим проверить хотя бы один фильм:
         if response_data["movies"]:
             assert "id" in response_data["movies"][0], "ID фильма отсутствует в ответе"
@@ -22,7 +24,9 @@ class TestMoviesAPI:
         assert "page" in response_data, "Ключ page отсутствуют в ответе"
         assert "pageSize" in response_data, "Ключ pageSize отсутствуют в ответе"
 
-
+'''
+                        Негативные тесты:
+'''
 class TestMoviesAPINegative:
     @pytest.mark.parametrize("field, value", [
         ("pageSize", "21"),  # некорректное количество страниц
@@ -41,10 +45,3 @@ class TestMoviesAPINegative:
 
         expected_status = 400  # Важно! Ожидаемый статус-код
         api_manager_movies.movies_api.get_poster_movie(data, expected_status)
-
-'''  ддя фикстуры
-api_manager_auth.auth_api.authenticate(
-    registered_user["email"],
-    registered_user["password"]
-)
-'''
