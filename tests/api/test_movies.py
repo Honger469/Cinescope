@@ -26,17 +26,18 @@ class TestMoviesAPI:
 class TestMoviesAPINegative:
     @pytest.mark.parametrize("field, value", [
         ("pageSize", "21"),  # некорректное количество страниц
-        ("page", 21)  # некорректный номер страницы
+        ("page", 21),  # некорректный номер страницы
+        ("minPrice", 10000)  # минимальная цена больше максимальной цены
     ])
-    def test_get_poster_negative(self, api_manager_movies: ApiManagerMovies, test_poster):
-        data = test_user
+    def test_get_poster_negative(self, api_manager_movies: ApiManagerMovies, test_poster, field, value):
+        data = test_poster
 
-        if value_register == "MISSING":
-            data.pop(field_register, None)  # удаляем ключ из словаря
+        if value == "MISSING":
+            data.pop(field, None)  # удаляем ключ из словаря
         else:
-            data[field_register] = value_register  # изменяем или оставляем None
+            data[field] = value  # изменяем или оставляем None
 
-        print(f"\nНегативный тест. Проверка поля {field_register}={value_register}")
+        print(f"\nНегативный тест. Проверка поля {field}={value}")
 
         expected_status = 400  # Важно! Ожидаемый статус-код
-        api_manager_auth.auth_api.register_user(test_user, expected_status)
+        api_manager_movies.movies_api.get_poster_movie(data, expected_status)

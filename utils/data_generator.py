@@ -55,12 +55,12 @@ class DataGenerator:
         Генерация количества страницы
         Генерация номера страницы в пределах количества страниц
         """
-        max_price = random.randint(300, 500)
+        max_price = random.randint(400, 500)
         return random.randint(1, max_price), max_price
 
     @staticmethod
     def generate_random_genre_id():
         """
-        Генерация номера страницы
+        Генерация жанра
         """
         return random.randint(1, 10)

@@ -33,13 +33,14 @@ class TestAuthAPI:
         assert "accessToken" in response_data, "Токен доступа отсутствует в ответе"
         assert response_data["user"]["email"] == registered_user["email"], "Email не совпадает"
 
-class TestAuthNegative:
 
+class TestAuthNegative:
     @pytest.mark.parametrize("field_register, value_register", [
         ("email", "abc"),  # некорректный email
         ("fullName", ""),  # пустая строка
         ("password", None),  # ключ есть, но значение None
     ])
+
     def test_negative_register(self, api_manager_auth: ApiManagerAuth, test_user, field_register, value_register):
         data = test_user
 
@@ -51,7 +52,7 @@ class TestAuthNegative:
         print(f"\nНегативный тест. Проверка поля {field_register}={value_register}")
 
         expected_status = 400   # Важно! Ожидаемый статус-код
-        api_manager_auth.auth_api.register_user(test_user, expected_status)
+        api_manager_auth.auth_api.register_user(data, expected_status)
 
     @pytest.mark.parametrize("field_auth, value_auth", [
         ("email", "abc"),  # некорректный email
@@ -59,6 +60,7 @@ class TestAuthNegative:
         ("password", "1"),  # неверный пароль
         ("password", ""),  # пустая строка
     ])
+
     def test_negative_auth(self, api_manager_auth: ApiManagerAuth, registered_user, field_auth, value_auth):
         login_data = {
             "email": registered_user["email"],
