@@ -1,4 +1,4 @@
-from constants import BASE_URL, MOVIE_ENDPOINT
+from constants import MOVIE_ENDPOINT, BASE_URL_MOVIES
 from custom_requester.custom_requester import CustomRequester
 
 
@@ -7,7 +7,7 @@ class MoviesAPI(CustomRequester):
       Класс для работы с фильмами.
       """
     def __init__(self, session):
-        super().__init__(session=session, base_url=BASE_URL)
+        super().__init__(session=session)
 
     def get_poster_movie(self, poster_data, expected_status=200):
         """
@@ -17,6 +17,7 @@ class MoviesAPI(CustomRequester):
         """
         return self.send_request(
             method="GET",
+            base_url=BASE_URL_MOVIES,
             endpoint=MOVIE_ENDPOINT,
             data=poster_data,
             expected_status=expected_status

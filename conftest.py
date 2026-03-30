@@ -1,7 +1,7 @@
 from faker import Faker
 import pytest
 import requests
-from constants import BASE_URL, REGISTER_ENDPOINT, LOGIN_ENDPOINT
+from constants import REGISTER_ENDPOINT, BASE_URL_AUTH
 from custom_requester.custom_requester import CustomRequester
 from tests.api.api_manager import ApiManagerAuth, ApiManagerMovies
 from utils.data_generator import DataGenerator
@@ -31,7 +31,7 @@ def api_manager_movies(session):
     """
     return ApiManagerMovies(session)
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def test_user():
     """
     Генерация случайного пользователя для тестов.
@@ -47,19 +47,35 @@ def test_user():
         "passwordRepeat": random_password,
         "roles": ["USER"]
     }
-def poster_data():
-    pass
-
-def movies_data():
-    pass
-
 @pytest.fixture(scope="session")
+def test_poster():
+    """
+    Генерация случайных параметров для просмотра афиши.
+    """
+    return {
+        "pageSize": 10,
+        "page": 1,
+        "minPrice": 1,
+        "maxPrice": 1000,
+        "locations": "MSK",
+        "published": True,
+        "genreId": 1,
+        "createdAt": 1
+    }
+@pytest.fixture(scope="session")
+def test_movie():
+    """
+    Генерация случайных параметров для создания фильма.
+    """
+
+@pytest.fixture()
 def registered_user(requester, test_user):
     """
     Фикстура для регистрации и получения данных зарегистрированного пользователя.
     """
     response = requester.send_request(
         method="POST",
+        base_url=BASE_URL_AUTH,
         endpoint=REGISTER_ENDPOINT,
         data=test_user,
         expected_status=201
@@ -75,4 +91,4 @@ def requester():
     Фикстура для создания экземпляра CustomRequester.
     """
     session = requests.Session()
-    return CustomRequester(session=session, base_url=BASE_URL)
+    return CustomRequester(session=session)

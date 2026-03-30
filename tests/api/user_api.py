@@ -1,4 +1,4 @@
-from constants import BASE_URL
+from constants import BASE_URL_AUTH
 from custom_requester.custom_requester import CustomRequester
 
 class UserAPI(CustomRequester):
@@ -7,7 +7,7 @@ class UserAPI(CustomRequester):
     """
 
     def __init__(self, session):
-        super().__init__(session=session, base_url=BASE_URL)
+        super().__init__(session=session)
         self.session = session
 
     def get_user_info(self, user_id, expected_status=200):
@@ -18,6 +18,7 @@ class UserAPI(CustomRequester):
         """
         return self.send_request(
             method="GET",
+            base_url=BASE_URL_AUTH,
             endpoint=f"/user/{user_id}",
             expected_status=expected_status
         )
@@ -30,6 +31,7 @@ class UserAPI(CustomRequester):
         """
         return self.send_request(
             method="DELETE",
+            base_url=BASE_URL_AUTH,
             endpoint=f"/user/{user_id}",
             expected_status=expected_status
         )

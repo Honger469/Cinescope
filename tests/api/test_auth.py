@@ -1,6 +1,6 @@
 import pytest
 import requests
-from constants import BASE_URL, HEADERS, REGISTER_ENDPOINT,  LOGIN_ENDPOINT
+from constants import BASE_URL_AUTH, HEADERS, REGISTER_ENDPOINT,  LOGIN_ENDPOINT
 from custom_requester.custom_requester import CustomRequester
 from tests.api.api_manager import ApiManagerAuth
 
@@ -18,7 +18,7 @@ class TestAuthAPI:
         assert "roles" in response_data, "Роли пользователя отсутствуют в ответе"
         assert "USER" in response_data["roles"], "Роль USER должна быть у пользователя"
 
-    def test_register_and_login_user(self, api_manager_auth: ApiManagerAuth, registered_user):
+    def test_login_user(self, api_manager_auth: ApiManagerAuth, registered_user):
         """
         Тест на регистрацию и авторизацию пользователя.
         """
@@ -50,7 +50,8 @@ class TestBookingsNegative:
         else:
             data[field] = value  # изменяем или оставляем None
 
+        print(f"\nНегативный тест. Проверка поля {field}={value}")
+
         expected_status = 400   # Важно! Ожидаемый статус-код
         response = api_manager_auth.auth_api.register_user(test_user, expected_status)
 
-        print(f"\nНегативный тест. Проверка поля {field}={value}")
