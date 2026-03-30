@@ -47,19 +47,22 @@ def test_user():
         "passwordRepeat": random_password,
         "roles": ["USER"]
     }
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def test_poster():
     """
     Генерация случайных параметров для просмотра афиши.
     """
+    random_page_size, random_page = DataGenerator.generate_random_page()
+    random_min_price, random_max_price = DataGenerator.generate_random_min_max_price()
+    random_genre_id = DataGenerator.generate_random_genre_id()
     return {
-        "pageSize": 10,
-        "page": 1,
-        "minPrice": 1,
-        "maxPrice": 1000,
+        "pageSize": random_page_size,
+        "page": random_page,
+        "minPrice": random_min_price,
+        "maxPrice": random_max_price,
         "locations": "MSK",
         "published": True,
-        "genreId": 1,
+        "genreId": random_genre_id,
         "createdAt": 1
     }
 @pytest.fixture(scope="session")

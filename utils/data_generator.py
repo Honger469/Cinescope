@@ -1,5 +1,7 @@
 import random
 import string
+import time
+
 from faker import Faker
 faker = Faker()
 
@@ -37,4 +39,30 @@ class DataGenerator:
         password = list(letters + digits + remaining_chars)
         random.shuffle(password)
 
-        return ''.join(password)
+
+    @staticmethod
+    def generate_random_page():
+        """
+        Генерация количества страницы
+        Генерация номера страницы в пределах количества страниц
+        """
+        millis = int(time.time() * 1000)
+        random.seed(millis)
+        page_size = random.randint(1, 50)
+        return random.randint(1, page_size), page_size
+
+    @staticmethod
+    def generate_random_min_max_price():
+        """
+        Генерация количества страницы
+        Генерация номера страницы в пределах количества страниц
+        """
+        max_price = random.randint(1, 5000)
+        return random.randint(1, max_price), max_price
+
+    @staticmethod
+    def generate_random_genre_id():
+        """
+        Генерация номера страницы
+        """
+        return random.randint(1, 10)
