@@ -9,17 +9,17 @@ class MoviesAPI(CustomRequester):
     def __init__(self, session):
         super().__init__(session=session)
 
-    def get_poster_movie(self, poster_data, expected_status=200):
+    def get_poster_movie(self, test_poster, expected_status=200):
         """
         Получение афиш фильмов.
-        :param poster_data: Данные афиши.
+        :param test_poster: Данные афиши.
         :param expected_status: Ожидаемый статус-код.
         """
         return self.send_request(
             method="GET",
             base_url=BASE_URL_MOVIES,
             endpoint=MOVIE_ENDPOINT,
-            data=poster_data,
+            params=test_poster,
             expected_status=expected_status
         )
 

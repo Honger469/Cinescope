@@ -18,19 +18,26 @@ class CustomRequester:
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
 
-    def send_request(self, method, base_url, endpoint, data=None, expected_status=200, need_logging=True):
+    def send_request(self, method, base_url, endpoint, data=None, params=None, expected_status=200, need_logging=True):
         """
         Универсальный метод для отправки запросов.
         :param method: HTTP метод (GET, POST, PUT, DELETE и т.д.).
         :param base_url: Base url.
         :param endpoint: Эндпоинт (например, "/login").
         :param data: Тело запроса (JSON-данные).
+        :param params: Параметры query запроса .
         :param expected_status: Ожидаемый статус-код (по умолчанию 200).
         :param need_logging: Флаг для логирования (по умолчанию True).
         :return: Объект ответа requests.Response.
         """
         url = f"{base_url}{endpoint}"
-        response = self.session.request(method, url, json=data, headers=self.headers)
+        request_kwargs = {
+            "headers": self.headers
+        }
+        if method.upper() == "GET":
+            # GET: передаем данные как query params
+            request_kwargs["params"] = params
+        response = self.session.request(method, url, json=data, **request_kwargs)
         if need_logging:
             self.log_request_and_response(response)
         if response.status_code != expected_status:

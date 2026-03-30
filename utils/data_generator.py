@@ -46,10 +46,8 @@ class DataGenerator:
         Генерация количества страницы
         Генерация номера страницы в пределах количества страниц
         """
-        millis = int(time.time() * 1000)
-        random.seed(millis)
-        page_size = random.randint(1, 50)
-        return random.randint(1, page_size), page_size
+        page_size = random.randint(1, 20)
+        return page_size, random.randint(1, page_size)
 
     @staticmethod
     def generate_random_min_max_price():
@@ -57,7 +55,7 @@ class DataGenerator:
         Генерация количества страницы
         Генерация номера страницы в пределах количества страниц
         """
-        max_price = random.randint(1, 5000)
+        max_price = random.randint(300, 500)
         return random.randint(1, max_price), max_price
 
     @staticmethod

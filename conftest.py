@@ -62,8 +62,7 @@ def test_poster():
         "maxPrice": random_max_price,
         "locations": "MSK",
         "published": True,
-        "genreId": random_genre_id,
-        "createdAt": 1
+        "genreId": 1,
     }
 @pytest.fixture(scope="session")
 def test_movie():
