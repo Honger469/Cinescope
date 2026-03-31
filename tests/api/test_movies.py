@@ -14,7 +14,7 @@ class TestMoviesAPI:
 
     def test_create_get_delete_movie(self, admin_api, test_movie, api_manager_movies):
         """Позитивный тест на создание, получение и удаление фильма."""
-        print("\nПозитивный тест. Создание, получение, удаление фильма")
+        print("\n\nПозитивный тест. Создание, получение, удаление фильма")
 
         # Создание фильма
         data = test_movie
@@ -57,7 +57,7 @@ class TestMoviesAPI:
     ])
     def test_get_poster(self, api_manager_movies: ApiManagerMovies, test_poster, field_get, value_get):
         """Позитивный тест на получение афиши."""
-        print(f"\nПозитивный тест. Получение афиши. Проверка поля {field_get}={value_get}")
+        print(f"\n\nПозитивный тест. Получение афиши. Проверка поля {field_get}={value_get}")
 
         if field_get == "Default":
             data = {}
@@ -103,7 +103,7 @@ class TestMoviesAPINegative:
     ])
     def test_create_movie(self, admin_api, test_movie, api_manager_movies, field_create_negative, value_create_negative):
         """Негативный тест на создание фильма."""
-        print(f"\nНегативный тест. Проверка поля {field_create_negative}={value_create_negative}")
+        print(f"\n\nНегативный тест. Проверка поля {field_create_negative}={value_create_negative}")
 
         data = test_movie
         if value_create_negative == "MISSING":
@@ -134,7 +134,7 @@ class TestMoviesAPINegative:
     def test_get_poster_negative(self, api_manager_movies: ApiManagerMovies, test_poster,
                                  field_negative, value_negative):
         """Негативный тест на получение афиши."""
-        print(f"\nНегативный тест. Проверка поля {field_negative}={value_negative}")
+        print(f"\n\nНегативный тест. Проверка поля {field_negative}={value_negative}")
 
         data = test_poster.copy()
         if value_negative == "MISSING":
