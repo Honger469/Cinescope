@@ -4,15 +4,16 @@ class TestMoviesAPI:
     @pytest.mark.parametrize("field, value", [
         ("Default", True),  #  Не отправляем ничего
         ("page", "MISSING"),  # Не отправляем page
-        ("pageSize", "1"),  # Граничное значение
-        ("minPrice", "1"),  # Граничное значение
-        ("maxPrice", 1),  # Граничное значение
+        ("pageSize", 1),  # Граничное значение
+        ("minPrice", 1),  # Граничное значение
+        ("maxPrice", 2),  # Граничное значение
         ("genreId", 1)  # Граничное значение
     ])
     def test_get_poster(self, api_manager_movies: ApiManagerMovies, test_poster, field, value):
         """
-                Тест на получение афиши.
+                Позитивные тесты на получение афиши.
         """
+        print(f"\nПозитивный тест. Проверка поля {field}={value}")
         if field == "Default":  # Сервер подставит значения по умолчанию
             data = {}
         else:
@@ -21,7 +22,8 @@ class TestMoviesAPI:
                 data.pop(field, None)  # удаляем ключ из словаря
             else:
                 data[field] = value  # изменяем или оставляем None
-
+            if data["minPrice"] > data["maxPrice"]: #   в позитивном тесте должно быть minPrice < maxPrice
+                data["minPrice"] = data["maxPrice"]-1
         response = api_manager_movies.movies_api.get_poster_movie(data)
         response_data = response.json()
 
@@ -51,23 +53,27 @@ class TestMoviesAPINegative:
         ("pageSize", 0),   # Невалидные граничные значения
         ("pageSize", 21),  # Невалидные граничные значения
         ("minPrice", 0),  #  Невалидные граничные значения
-        ("maxPrice", 0),  # Невалидные граничные значения
-        ("minPrice ", 10000),  #  minPrice > maxPrice
-        ("page ", "abc"),  #  Невалидные значения
-        ("pageSize ", "abc"),  #  Невалидные значения
-        ("minPrice ", "abc"),  #  Невалидные значения
-        ("maxPrice ", "abc"),  #  Невалидные значения
+        ("maxPrice", 1),  # Невалидные граничные значения
+        ("minPrice", 10000),  #  minPrice > maxPrice
+        ("page", "abc"),  #  Невалидные значения
+        ("pageSize", "abc"),  #  Невалидные значения
+        ("minPrice", "abc"),  #  Невалидные значения
+        ("maxPrice", "abc"),  #  Невалидные значения
         ("genreId", "abc")  #  Невалидные значения
     ])
     def test_get_poster_negative(self, api_manager_movies: ApiManagerMovies, test_poster,
                                  field_negative, value_negative, expected_status = 400):
+        """
+                Негативные тесты на получение афиши.
+        """
+
+        print(f"\nНегативный тест. Проверка поля {field_negative}={value_negative}")
+
         data = test_poster
 
         if value_negative == "MISSING":
             data.pop(field_negative, None)  # удаляем ключ из словаря
         else:
             data[field_negative] = value_negative  # изменяем или оставляем None
-
-        print(f"\nНегативный тест. Проверка поля {field_negative}={value_negative}")
 
         api_manager_movies.movies_api.get_poster_movie(data, expected_status)
