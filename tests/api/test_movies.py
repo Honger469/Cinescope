@@ -3,6 +3,7 @@ from tests.api.api_manager import ApiManagerMovies
 from faker import Faker
 fake = Faker("ru_RU")
 
+
 class TestMoviesAPI:
 
     def test_create_get_delete_movie(self, admin_api, test_movie, api_manager_movies):
@@ -101,9 +102,12 @@ class TestMoviesAPI:
         assert "page" in response_data, "Ключ page отсутствуют в ответе"
         assert "pageSize" in response_data, "Ключ pageSize отсутствуют в ответе"
 
-"""
-                     Негативные тесты:
-"""
+
+# ----------------------------
+# Негативные тесты
+# ----------------------------
+
+
 class TestMoviesAPINegative:
 
     @pytest.mark.parametrize("field_create_negative, value_create_negative", [

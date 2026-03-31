@@ -1,5 +1,6 @@
 from tests.api.api_manager import ApiManagerPayment
 
+
 class TestPaymentAPI:
 
     def test_get_user_payment(self, admin_api, api_manager_payment:ApiManagerPayment):

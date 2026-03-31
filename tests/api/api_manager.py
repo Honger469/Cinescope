@@ -3,10 +3,13 @@ from tests.api.payment_api import PaymentAPI
 from tests.api.user_api import UserAPI
 from tests.api.movies_api import MoviesAPI
 
+
 class ApiManagerAuth:
+
     """
     Класс для управления API-классами с единой HTTP-сессией.
     """
+
     def __init__(self, session):
         """
         Инициализация ApiManagerAuth.

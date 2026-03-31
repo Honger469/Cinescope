@@ -6,7 +6,8 @@ class MoviesAPI(CustomRequester):
 
     """
       Класс для работы с фильмами.
-      """
+    """
+
     def __init__(self, session):
         super().__init__(session=session)
 

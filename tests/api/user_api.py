@@ -1,6 +1,7 @@
 from constants import BASE_URL_AUTH
 from custom_requester.custom_requester import CustomRequester
 
+
 class UserAPI(CustomRequester):
 
     """

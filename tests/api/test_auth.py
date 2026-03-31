@@ -1,6 +1,7 @@
 import pytest
 from tests.api.api_manager import ApiManagerAuth
 
+
 class TestAuthAPI:
 
     def test_register_and_login_user(self, api_manager_auth: ApiManagerAuth, registered_user):
@@ -13,7 +14,7 @@ class TestAuthAPI:
         }
 
         # Сначала делаем logout
-        api_manager_auth.auth_api.logout()  # выход из аккаунта
+        api_manager_auth.auth_api.logout()
 
         response = api_manager_auth.auth_api.login_user(login_data)
         response_data = response.json()
@@ -38,9 +39,12 @@ class TestAuthAPI:
         assert response_data["verified"] is new_verified, "Статус верификации не изменился"
         assert response_data["banned"] is new_banned, "Статус banned не изменился"
 
-'''
-                        Негативные тесты:
-'''
+
+# ----------------------------
+# Негативные тесты
+# ----------------------------
+
+
 class TestAuthNegative:
 
     @pytest.mark.parametrize("field_register, value_register", [

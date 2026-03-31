@@ -3,10 +3,13 @@ import logging
 import os
 import requests
 
+
 class CustomRequester:
+
     """
     Кастомный реквестер для стандартизации и упрощения отправки HTTP-запросов.
     """
+
     base_headers = {
         "Content-Type": "application/json",
         "Accept": "application/json"
@@ -92,7 +95,7 @@ class CustomRequester:
     def _update_session_headers(self, **kwargs):
         """
         Обновление заголовков сессии.
-        :param session: Объект requests.Session, предоставленный API-классом.
+        :param session: Объект requests. Session, предоставленный API-классом.
         :param kwargs: Дополнительные заголовки.
         """
         self.headers.update(kwargs)  # Обновляем базовые заголовки

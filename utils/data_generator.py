@@ -3,6 +3,7 @@ import string
 from faker import Faker
 faker = Faker()
 
+
 class DataGenerator:
     
     @staticmethod
