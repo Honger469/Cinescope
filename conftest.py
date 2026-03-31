@@ -45,13 +45,10 @@ def test_user():
     """
     Генерация случайного пользователя для тестов.
     """
-    random_email = DataGenerator.generate_random_email()
-    random_name = DataGenerator.generate_random_name()
     random_password = DataGenerator.generate_random_password()
-
     return {
-        "email": random_email,
-        "fullName": random_name,
+        "email": DataGenerator.generate_random_email(),
+        "fullName": DataGenerator.generate_random_name(),
         "password": random_password,
         "passwordRepeat": random_password,
         "roles": ["USER"]

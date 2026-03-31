@@ -5,19 +5,6 @@ from custom_requester.custom_requester import CustomRequester
 from tests.api.api_manager import ApiManagerAuth
 
 class TestAuthAPI:
-    def test_register_user(self, api_manager_auth: ApiManagerAuth, test_user):
-        """
-        Позитивный тест на регистрацию пользователя.
-        """
-        response = api_manager_auth.auth_api.register_user(test_user)
-        response_data = response.json()
-
-        # Проверки
-        assert response_data["email"] == test_user["email"], "Email не совпадает"
-        assert "id" in response_data, "ID пользователя отсутствует в ответе"
-        assert "roles" in response_data, "Роли пользователя отсутствуют в ответе"
-        assert "USER" in response_data["roles"], "Роль USER должна быть у пользователя"
-
     def test_login_user(self, api_manager_auth: ApiManagerAuth, registered_user):
         """
         Позитивный тест на регистрацию и авторизацию пользователя.
@@ -45,6 +32,20 @@ class TestAuthAPI:
         response = admin_api.user_api.change_user(user_id, new_data, expected_status=200)
         assert response.json()["verified"] is new_verified, "Статус верификации не изменился"
         assert response.json()["banned"] is new_banned, "Статус banned не изменился"
+
+         #   Отдельный тест регистрации, который по факту не нужен, тк регистрация тестируется выше
+    # def test_register_user(self, api_manager_auth: ApiManagerAuth, test_user):
+    #     """
+    #     Позитивный тест на регистрацию пользователя.
+    #     """
+    #     response = api_manager_auth.auth_api.register_user(test_user)
+    #     response_data = response.json()
+    #
+    #     # Проверки
+    #     assert response_data["email"] == test_user["email"], "Email не совпадает"
+    #     assert "id" in response_data, "ID пользователя отсутствует в ответе"
+    #     assert "roles" in response_data, "Роли пользователя отсутствуют в ответе"
+    #     assert "USER" in response_data["roles"], "Роль USER должна быть у пользователя"
 
 '''
                         Негативные тесты:
