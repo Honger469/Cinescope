@@ -10,6 +10,9 @@ class TestMoviesAPI:
                 Позитивный тест на создание, получение, удаление фильма.
         """
         print("\nПозитивный тест. Создание, получение, удаление фильма")
+        """
+                Позитивный тест на создание фильма.
+        """
         data = test_movie
         response = api_manager_movies.movies_api.create_movie(data)
         response_created = response.json()

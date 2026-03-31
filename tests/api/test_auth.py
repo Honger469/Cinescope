@@ -7,7 +7,7 @@ from tests.api.api_manager import ApiManagerAuth
 class TestAuthAPI:
     def test_register_user(self, api_manager_auth: ApiManagerAuth, test_user):
         """
-        Тест на регистрацию пользователя.
+        Позитивный тест на регистрацию пользователя.
         """
         response = api_manager_auth.auth_api.register_user(test_user)
         response_data = response.json()
@@ -20,7 +20,7 @@ class TestAuthAPI:
 
     def test_login_user(self, api_manager_auth: ApiManagerAuth, registered_user):
         """
-        Тест на регистрацию и авторизацию пользователя.
+        Позитивный тест на регистрацию и авторизацию пользователя.
         """
         login_data = {
             "email": registered_user["email"],
@@ -35,7 +35,7 @@ class TestAuthAPI:
 
     def test_change_user(self, admin_api, registered_user):
         """
-        Тест на изменение пользователя.
+        Позитивный тест на изменение пользователя.
         """
         user_id = registered_user["id"]
         new_verified = True
