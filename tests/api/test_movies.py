@@ -62,7 +62,7 @@ class TestMoviesAPI:
         if field_get == "Default":
             data = {}
         else:
-            data = test_poster
+            data = test_poster.copy()
             if value_get == "MISSING":
                 data.pop(field_get, None)
             else:
@@ -136,7 +136,7 @@ class TestMoviesAPINegative:
         """Негативный тест на получение афиши."""
         print(f"\nНегативный тест. Проверка поля {field_negative}={value_negative}")
 
-        data = test_poster
+        data = test_poster.copy()
         if value_negative == "MISSING":
             data.pop(field_negative, None)
         else:
