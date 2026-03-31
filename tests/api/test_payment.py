@@ -1,12 +1,15 @@
 from tests.api.api_manager import ApiManagerPayment
 
 
+# ----------------------------
+# Позитивные тесты
+# ----------------------------
+
+
 class TestPaymentAPI:
 
     def test_get_user_payment(self, admin_api, api_manager_payment:ApiManagerPayment):
-        """
-                Позитивный тест на получение платежей пользователя.
-        """
+        """Позитивный тест на получение платежей пользователя."""
         print("\nПозитивный тест. Создание, получение, удаление фильма")
         user_id = "0bfbe544-2f80-472f-af9b-b7986490a3d7"
         response = api_manager_payment.payment_api.get_user_id_payment(user_id)

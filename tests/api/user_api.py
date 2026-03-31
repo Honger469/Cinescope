@@ -4,9 +4,7 @@ from custom_requester.custom_requester import CustomRequester
 
 class UserAPI(CustomRequester):
 
-    """
-    Класс для работы с API пользователей.
-    """
+    """Класс для работы с API пользователей."""
 
     def __init__(self, session):
         super().__init__(session=session)

@@ -6,9 +6,7 @@ import requests
 
 class CustomRequester:
 
-    """
-    Кастомный реквестер для стандартизации и упрощения отправки HTTP-запросов.
-    """
+    """Кастомный реквестер для стандартизации и упрощения отправки HTTP-запросов."""
 
     base_headers = {
         "Content-Type": "application/json",

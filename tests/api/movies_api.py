@@ -4,9 +4,7 @@ from custom_requester.custom_requester import CustomRequester
 
 class MoviesAPI(CustomRequester):
 
-    """
-      Класс для работы с фильмами.
-    """
+    """Класс для работы с фильмами."""
 
     def __init__(self, session):
         super().__init__(session=session)

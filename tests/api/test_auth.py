@@ -2,12 +2,15 @@ import pytest
 from tests.api.api_manager import ApiManagerAuth
 
 
+# ----------------------------
+# Позитивные тесты
+# ----------------------------
+
+
 class TestAuthAPI:
 
     def test_register_and_login_user(self, api_manager_auth: ApiManagerAuth, registered_user):
-        """
-        Позитивный тест на регистрацию и авторизацию пользователя.
-        """
+        """Позитивный тест на регистрацию и авторизацию пользователя."""
         login_data = {
             "email": registered_user["email"],
             "password": registered_user["password"]
@@ -24,9 +27,7 @@ class TestAuthAPI:
         assert response_data["user"]["email"] == registered_user["email"], "Email не совпадает"
 
     def test_change_user(self, admin_api, registered_user):
-        """
-        Позитивный тест на изменение пользователя.
-        """
+        """Позитивный тест на изменение пользователя."""
         user_id = registered_user["id"]
         new_verified = True
         new_banned = False
@@ -52,64 +53,50 @@ class TestAuthNegative:
         ("fullName", ""),  # пустая строка
         ("password", "MISSING"),  # ключ есть, но значение None
     ])
-
     def test_negative_register(self, api_manager_auth: ApiManagerAuth, test_user, field_register, value_register):
-        """
-            Негативные тесты на регистрацию.
-        """
-
+        """Негативный тест на регистрацию пользователя."""
         # Сначала делаем logout
-        api_manager_auth.auth_api.logout()  # выход из аккаунта
+        api_manager_auth.auth_api.logout()
 
         data = test_user
-
         if value_register == "MISSING":
-            data.pop(field_register, None)  # удаляем ключ из словаря
+            data.pop(field_register, None)
         else:
-            data[field_register] = value_register  # изменяем или оставляем None
+            data[field_register] = value_register
 
         print(f"\nНегативный тест. Проверка поля {field_register}={value_register}")
-
-        expected_status = 400   # Важно! Ожидаемый статус-код
+        expected_status = 400
         api_manager_auth.auth_api.register_user(data, expected_status)
 
     @pytest.mark.parametrize("field_auth, value_auth", [
         ("email", "abc"),  # некорректный email
-        ("email", ""),  # пустая строка
-        ("password", "1"),  # неверный пароль
+        ("email", ""),     # пустая строка
+        ("password", "1"), # неверный пароль
         ("password", ""),  # пустая строка
     ])
-
     def test_negative_auth(self, api_manager_auth: ApiManagerAuth, registered_user, field_auth, value_auth):
-        """
-            Негативные тесты на авторизацию.
-        """
-
+        """Негативный тест на авторизацию пользователя."""
         login_data = {
             "email": registered_user["email"],
             "password": registered_user["password"]
         }
 
         if value_auth == "MISSING":
-            login_data.pop(field_auth, None)  # удаляем ключ из словаря
+            login_data.pop(field_auth, None)
         else:
-            login_data[field_auth] = value_auth  # изменяем или оставляем None
+            login_data[field_auth] = value_auth
 
         print(f"\nНегативный тест. Проверка поля {field_auth}={value_auth}")
-
-        expected_status = 401   # Ожидаемый статус-код
+        expected_status = 401
 
         # Сначала делаем logout
-        api_manager_auth.auth_api.logout()  # выход из аккаунта
+        api_manager_auth.auth_api.logout()
 
         api_manager_auth.auth_api.login_user(login_data, expected_status)
 
     def test_negative_change_user(self, api_manager_auth, authorized_user, registered_user):
-        """
-            Негативный тест на попытку изменения пользователя без соответствующих прав.
-        """
-        print(f"\nНегативный тест. Попытка изменения пользователя без соответствующих прав")
+        """Негативный тест на изменение пользователя без соответствующих прав."""
+        print("\nНегативный тест. Попытка изменения пользователя без соответствующих прав")
         user_id = registered_user["id"]
         new_data = {"verified": True, "banned": False}
         api_manager_auth.user_api.change_user(user_id, new_data, expected_status=403)
-

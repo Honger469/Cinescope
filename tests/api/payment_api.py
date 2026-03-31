@@ -4,9 +4,7 @@ from custom_requester.custom_requester import CustomRequester
 
 class PaymentAPI(CustomRequester):
 
-    """
-    Класс для работы с платежами.
-    """
+    """Класс для работы с платежами."""
 
     def __init__(self, session):
         super().__init__(session=session)
