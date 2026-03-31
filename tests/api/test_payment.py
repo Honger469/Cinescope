@@ -3,7 +3,7 @@ from tests.api.api_manager import ApiManagerPayment
 
 class TestPaymentAPI:
 
-    def test_create_payment(self, admin_api, api_manager_payment:ApiManagerPayment):
+    def test_get_user_payment(self, admin_api, api_manager_payment:ApiManagerPayment):
         """
                 Позитивный тест на создание, получение платежей пользователя.
         """
@@ -13,8 +13,6 @@ class TestPaymentAPI:
         response_data = response.json()
 
         # Проверки
-
-        # Если хотим проверить хотя бы один фильм:
         if response_data:
             assert "id" in response_data[0]
             assert "userId" in response_data[0]

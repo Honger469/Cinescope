@@ -33,7 +33,7 @@ class TestMoviesAPI:
         assert "description" in response_got, "Ключ отсутствуют в ответе"
 
         """
-                        Позитивный тест на редактирование фильма.
+                Позитивный тест на редактирование фильма.
         """
         data["name"] = fake.sentence(nb_words=3)
         data["description"] = fake.sentence(nb_words=8)

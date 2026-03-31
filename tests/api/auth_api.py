@@ -5,7 +5,7 @@ from constants import LOGIN_ENDPOINT, REGISTER_ENDPOINT, BASE_URL_AUTH, LOGOUT_E
 class AuthAPI(CustomRequester):
     """
       Класс для работы с аутентификацией.
-      """
+    """
 
     def __init__(self, session):
         super().__init__(session=session)

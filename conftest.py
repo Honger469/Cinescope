@@ -99,19 +99,19 @@ def test_movie():
         "published": True,
         "genreId": random.randint(1, 5)
     }
-@pytest.fixture()
-def test_card():
-    """
-    Генерация случайных данных карты.
-    """
-    fake = Faker()
-    return {
-        "cardNumber": ''.join(str(random.randint(0, 9)) for _ in range(16)),
-        "cardHolder": f"{faker.first_name()} {faker.last_name()}",
-        "expirationDate": '/'.join(str(random.randint(1, 24)) for _ in range(2)),
-        "securityCode": ''.join(str(random.randint(0, 9)) for _ in range(3))
-
-    }
+# @pytest.fixture()
+# def test_card():
+#     """
+#     Генерация случайных данных карты.
+#     """
+#     fake = Faker()
+#     return {
+#         "cardNumber": ''.join(str(random.randint(0, 9)) for _ in range(16)),
+#         "cardHolder": f"{faker.first_name()} {faker.last_name()}",
+#         "expirationDate": '/'.join(str(random.randint(1, 24)) for _ in range(2)),
+#         "securityCode": ''.join(str(random.randint(0, 9)) for _ in range(3))
+#
+#     }
 
 @pytest.fixture()
 def authorized_user(api_manager_auth, registered_user):
