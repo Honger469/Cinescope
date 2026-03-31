@@ -1,3 +1,5 @@
+import random
+
 from faker import Faker
 import pytest
 import requests
@@ -64,17 +66,31 @@ def test_poster():
     """
     Генерация случайных параметров для просмотра афиши.
     """
-    random_page_size, random_page = DataGenerator.generate_random_page()
-    random_min_price, random_max_price = DataGenerator.generate_random_min_max_price()
-    random_genre_id = DataGenerator.generate_random_genre_id()
+    random_max_price = random.randint(400, 500)
     return {
-        "pageSize": random_page_size,
-        "page": random_page,
-        "minPrice": random_min_price,
+        "pageSize": random.randint(1, 20),
+        "page": random.randint(1, 5),
+        "minPrice": random.randint(1, random_max_price-1),
         "maxPrice": random_max_price,
         "locations": "MSK",
         "published": True,
-        "genreId": 1,
+        "genreId": random.randint(1, 5)
+    }
+
+@pytest.fixture()
+def test_movie():
+    """
+    Генерация случайных параметров для создания фильма.
+    """
+    fake = Faker("ru_RU")
+    return {
+        "name":  fake.sentence(nb_words=3),
+        "imageUrl": f"https://{fake.domain_name()}/image/{fake.uuid4()}",
+        "price": random.randint(100, 400),
+        "description": fake.sentence(nb_words=10),
+        "location": "SPB",
+        "published": True,
+        "genreId": random.randint(1, 5)
     }
 
 @pytest.fixture()
@@ -84,12 +100,6 @@ def authorized_user(api_manager_auth, registered_user):
         registered_user["password"]
     )
     return registered_user
-
-@pytest.fixture(scope="session")
-def test_movie():
-    """
-    Генерация случайных параметров для создания фильма.
-    """
 
 @pytest.fixture()
 def registered_user(requester, test_user):

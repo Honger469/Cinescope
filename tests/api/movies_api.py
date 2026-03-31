@@ -9,30 +9,71 @@ class MoviesAPI(CustomRequester):
     def __init__(self, session):
         super().__init__(session=session)
 
-    def get_poster_movie(self, test_poster, expected_status=200):
+    def get_poster_movie(self, data_poster, expected_status=200):
         """
         Получение афиш фильмов.
-        :param test_poster: Данные афиши.
+        :param data_poster: Данные афиши.
         :param expected_status: Ожидаемый статус-код.
         """
         return self.send_request(
             method="GET",
             base_url=BASE_URL_MOVIES,
             endpoint=MOVIE_ENDPOINT,
-            params=test_poster,
+            params=data_poster,
             expected_status=expected_status
         )
 
-    def create_movie(self, movies_data, expected_status=201):
+    def create_movie(self, data_movie, expected_status=201):
         """
         Создание нового фильма.
-        :param movies_data: Данные фильма.
+        :param data_movie: Данные фильма.
         :param expected_status: Ожидаемый статус-код.
         """
         return self.send_request(
             method="POST",
             base_url=BASE_URL_MOVIES,
             endpoint=MOVIE_ENDPOINT,
-            data=movies_data,
+            data=data_movie,
+            expected_status=expected_status
+        )
+
+    def get_movie(self, id_movie, expected_status=200):
+        """
+        Получение данных фильма.
+        :param id_movie:  Id фильма.
+        :param expected_status: Ожидаемый статус-код.
+        """
+        return self.send_request(
+            method="GET",
+            base_url=BASE_URL_MOVIES,
+            endpoint=f"{MOVIE_ENDPOINT}/{id_movie}",
+            expected_status=expected_status
+        )
+
+    def change_movie(self, id_movie, data_movie, expected_status=200):
+        """
+        Редактирование фильма.
+        :param id_movie:  Id фильма.
+        :param data_movie: ОНовые данные фильма.
+        :param expected_status: Ожидаемый статус-код.
+        """
+        return self.send_request(
+            method="PATCH",
+            base_url=BASE_URL_MOVIES,
+            endpoint=f"{MOVIE_ENDPOINT}/{id_movie}",
+            data=data_movie,
+            expected_status=expected_status
+        )
+
+    def delete_movie(self, id_movie, expected_status=200):
+        """
+        Удаление фильма.
+        :param id_movie:  Id фильма.
+        :param expected_status: Ожидаемый статус-код.
+        """
+        return self.send_request(
+            method="DELETE",
+            base_url=BASE_URL_MOVIES,
+            endpoint=f"{MOVIE_ENDPOINT}/{id_movie}",
             expected_status=expected_status
         )

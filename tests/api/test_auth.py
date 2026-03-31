@@ -89,7 +89,7 @@ class TestAuthNegative:
 
         print(f"\nНегативный тест. Проверка поля {field_auth}={value_auth}")
 
-        expected_status = 401   # Важно! Ожидаемый статус-код
+        expected_status = 401   # Ожидаемый статус-код
         api_manager_auth.auth_api.login_user(login_data, expected_status)
 
     def test_negative_change_user(self, api_manager_auth, authorized_user, registered_user):

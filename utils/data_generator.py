@@ -40,27 +40,5 @@ class DataGenerator:
 
         return ''.join(password)
 
-    @staticmethod
-    def generate_random_page():
-        """
-        Генерация количества страницы
-        Генерация номера страницы в пределах количества страниц
-        """
-        page_size = random.randint(1, 20)
-        return page_size, random.randint(1, page_size)
 
-    @staticmethod
-    def generate_random_min_max_price():
-        """
-        Генерация количества страницы
-        Генерация номера страницы в пределах количества страниц
-        """
-        max_price = random.randint(400, 500)
-        return random.randint(1, max_price), max_price
 
-    @staticmethod
-    def generate_random_genre_id():
-        """
-        Генерация жанра
-        """
-        return random.randint(1, 10)
