@@ -3,6 +3,7 @@ from constants import LOGIN_ENDPOINT, REGISTER_ENDPOINT, BASE_URL_AUTH, LOGOUT_E
 
 
 class AuthAPI(CustomRequester):
+
     """
       Класс для работы с аутентификацией.
     """

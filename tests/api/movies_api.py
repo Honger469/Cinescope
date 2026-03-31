@@ -3,6 +3,7 @@ from custom_requester.custom_requester import CustomRequester
 
 
 class MoviesAPI(CustomRequester):
+
     """
       Класс для работы с фильмами.
       """

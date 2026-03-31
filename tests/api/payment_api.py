@@ -1,8 +1,9 @@
-from constants import BASE_URL_PAYMENT, PAYMENT_CREATE_ENDPOINT
+from constants import BASE_URL_PAYMENT
 from custom_requester.custom_requester import CustomRequester
 
 
 class PaymentAPI(CustomRequester):
+
     """
     Класс для работы с платежами.
     """

@@ -65,6 +65,7 @@ class TestMoviesAPI:
         ("maxPrice", 2),  # Граничное значение
         ("genreId", 1)  # Граничное значение
     ])
+
     def test_get_poster(self, api_manager_movies: ApiManagerMovies, test_poster, field_get, value_get):
         """
                 Позитивные тесты на получение афиши.
@@ -104,11 +105,13 @@ class TestMoviesAPI:
                      Негативные тесты:
 """
 class TestMoviesAPINegative:
+
     @pytest.mark.parametrize("field_create_negative, value_create_negative", [
         ("not_access", True),  # Без нужных прав
         ("name", ""),  # Пустое название
         ("name", "MISSING")  # Не отправляется название
     ])
+
     def test_create_movie(self, admin_api, test_movie, api_manager_movies, field_create_negative, value_create_negative):
         """
                 Негативные тесты на создание фильма.
@@ -128,7 +131,7 @@ class TestMoviesAPINegative:
             api_manager_movies.auth_api.logout()  # Выход из аккаунта
             expected_status = 401  # Ожидаемый статус-код
 
-        response = api_manager_movies.movies_api.create_movie(data, expected_status)
+        api_manager_movies.movies_api.create_movie(data, expected_status)
         pass
 
     @pytest.mark.parametrize("field_negative, value_negative", [
@@ -144,6 +147,7 @@ class TestMoviesAPINegative:
         ("maxPrice", "abc"),  #  Невалидные значения
         ("genreId", "abc")  #  Невалидные значения
     ])
+
     def test_get_poster_negative(self, api_manager_movies: ApiManagerMovies, test_poster,
                                  field_negative, value_negative):
         """

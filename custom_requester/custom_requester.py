@@ -1,7 +1,7 @@
 import json
-import requests
 import logging
 import os
+import requests
 
 class CustomRequester:
     """
@@ -12,7 +12,7 @@ class CustomRequester:
         "Accept": "application/json"
     }
 
-    def __init__(self, session):
+    def __init__(self, session:requests.Session):
         self.session = session
         self.headers = self.base_headers.copy()
         self.logger = logging.getLogger(__name__)
@@ -25,10 +25,10 @@ class CustomRequester:
         :param base_url: Base url.
         :param endpoint: Эндпоинт (например, "/login").
         :param data: Тело запроса (JSON-данные).
-        :param params: Параметры query запроса .
+        :param params: Параметры query запроса.
         :param expected_status: Ожидаемый статус-код (по умолчанию 200).
         :param need_logging: Флаг для логирования (по умолчанию True).
-        :return: Объект ответа requests.Response.
+        :return: Объект ответа requests. Response.
         """
         url = f"{base_url}{endpoint}"
         request_kwargs = {
@@ -48,9 +48,9 @@ class CustomRequester:
     def log_request_and_response(self, response):
         try:
             request = response.request
-            GREEN = '\033[32m'
-            RED = '\033[31m'
-            RESET = '\033[0m'
+            green = '\033[32m'
+            red = '\033[31m'
+            reset = '\033[0m'
             headers = " \\\n".join([f"-H '{header}: {value}'" for header, value in request.headers.items()])
             full_test_name = f"pytest {os.environ.get('PYTEST_CURRENT_TEST', '').replace(' (call)', '')}"
 
@@ -62,7 +62,7 @@ class CustomRequester:
 
             self.logger.info(f"\n{'=' * 40} REQUEST {'=' * 40}")
             self.logger.info(
-                f"{GREEN}{full_test_name}{RESET}\n"
+                f"{green}{full_test_name}{reset}\n"
                 f"curl -X {request.method} '{request.url}' \\\n"
                 f"{headers} \\\n"
                 f"{body}"
@@ -77,12 +77,12 @@ class CustomRequester:
             self.logger.info(f"\n{'=' * 40} RESPONSE {'=' * 40}")
             if not response.ok:
                 self.logger.info(
-                    f"\tSTATUS_CODE: {RED}{response.status_code}{RESET}\n"
-                    f"\tDATA: {RED}{response_data}{RESET}"
+                    f"\tSTATUS_CODE: {red}{response.status_code}{reset}\n"
+                    f"\tDATA: {red}{response_data}{reset}"
                 )
             else:
                 self.logger.info(
-                    f"\tSTATUS_CODE: {GREEN}{response.status_code}{RESET}\n"
+                    f"\tSTATUS_CODE: {green}{response.status_code}{reset}\n"
                     f"\tDATA:\n{response_data}"
                 )
             self.logger.info(f"{'=' * 80}\n")
