@@ -48,7 +48,7 @@ class TestMoviesAPI:
         api_manager_movies.movies_api.get_movie(response_created["id"], 404)
 
     @pytest.mark.parametrize("field_get, value_get", [
-        ("Default", True),  #  Не отправляем ничего
+        ("Default", True),  # Не отправляем ничего
         ("page", "MISSING"),# Не отправляем page
         ("pageSize", 1),    # Граничное значение
         ("minPrice", 1),    # Граничное значение

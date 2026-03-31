@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 import random
 from faker import Faker
 import pytest
@@ -10,6 +12,8 @@ from utils.data_generator import DataGenerator
 
 faker = Faker()
 
+# Загружаем логин пароль Администратора из .env
+load_dotenv()
 
 # ----------------------------
 # Сессия и HTTP-клиенты
@@ -102,7 +106,7 @@ def test_poster():
 @pytest.fixture()
 def admin_api(api_manager_auth):
     """Аутентификация под админом для тестов с правами администратора."""
-    api_manager_auth.auth_api.authenticate(SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD)
+    api_manager_auth.auth_api.authenticate(os.getenv("SUPER_ADMIN_EMAIL"), os.getenv("SUPER_ADMIN_PASSWORD"))
     return api_manager_auth
 
 
