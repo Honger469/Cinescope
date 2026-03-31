@@ -4,7 +4,7 @@ import random
 from faker import Faker
 import pytest
 import requests
-from constants import REGISTER_ENDPOINT, BASE_URL_AUTH, SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD
+from constants import REGISTER_ENDPOINT, BASE_URL_AUTH
 from custom_requester.custom_requester import CustomRequester
 from tests.api.api_manager import ApiManagerAuth, ApiManagerMovies, ApiManagerPayment
 from utils.data_generator import DataGenerator
@@ -80,7 +80,7 @@ def test_movie():
         "description": fake_local.sentence(nb_words=10),
         "location": "SPB",
         "published": True,
-        "genreId": random.randint(1, 5)
+        "genreId": random.randint(1, 4)
     }
 
 
@@ -106,7 +106,8 @@ def test_poster():
 @pytest.fixture()
 def admin_api(api_manager_auth):
     """Аутентификация под админом для тестов с правами администратора."""
-    api_manager_auth.auth_api.authenticate(os.getenv("SUPER_ADMIN_EMAIL"), os.getenv("SUPER_ADMIN_PASSWORD"))
+    api_manager_auth.auth_api.authenticate(os.getenv("SUPER_ADMIN_EMAIL"),
+    os.getenv("SUPER_ADMIN_PASSWORD"))
     return api_manager_auth
 
 
