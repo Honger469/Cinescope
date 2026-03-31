@@ -49,8 +49,8 @@ class TestAuthAPI:
 class TestAuthNegative:
 
     @pytest.mark.parametrize("field_register, value_register", [
-        ("email", "abc"),  # некорректный email
-        ("fullName", ""),  # пустая строка
+        ("email", "abc"),         # некорректный email
+        ("fullName", ""),         # пустая строка
         ("password", "MISSING"),  # ключ есть, но значение None
     ])
     def test_negative_register(self, api_manager_auth: ApiManagerAuth, test_user, field_register, value_register):
