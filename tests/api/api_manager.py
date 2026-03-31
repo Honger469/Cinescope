@@ -1,4 +1,5 @@
 from tests.api.auth_api import AuthAPI
+from tests.api.payment_api import PaymentAPI
 from tests.api.user_api import UserAPI
 from tests.api.movies_api import MoviesAPI
 
@@ -27,5 +28,19 @@ class ApiManagerMovies:
         """
         self.session = session
         self.movies_api = MoviesAPI(session)
+        self.auth_api = AuthAPI(session)
+
+
+class ApiManagerPayment:
+    """
+    Класс для управления API-классами с единой HTTP-сессией.
+    """
+    def __init__(self, session):
+        """
+        Инициализация ApiManagerPayment.
+        :param session: HTTP-сессия, используемая всеми API-классами.
+        """
+        self.session = session
+        self.payment_api = PaymentAPI(session)
         self.auth_api = AuthAPI(session)
 

@@ -5,7 +5,7 @@ import pytest
 import requests
 from constants import REGISTER_ENDPOINT, BASE_URL_AUTH, SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD
 from custom_requester.custom_requester import CustomRequester
-from tests.api.api_manager import ApiManagerAuth, ApiManagerMovies
+from tests.api.api_manager import ApiManagerAuth, ApiManagerMovies, ApiManagerPayment
 from utils.data_generator import DataGenerator
 
 faker = Faker()
@@ -32,6 +32,13 @@ def api_manager_movies(session):
     Фикстура для создания экземпляра ApiManagerAuth.
     """
     return ApiManagerMovies(session)
+
+@pytest.fixture(scope="session")
+def api_manager_payment(session):
+    """
+    Фикстура для создания экземпляра ApiManagerAuth.
+    """
+    return ApiManagerPayment(session)
 
 @pytest.fixture()
 def test_user():
@@ -91,6 +98,19 @@ def test_movie():
         "location": "SPB",
         "published": True,
         "genreId": random.randint(1, 5)
+    }
+@pytest.fixture()
+def test_card():
+    """
+    Генерация случайных данных карты.
+    """
+    fake = Faker()
+    return {
+        "cardNumber": ''.join(str(random.randint(0, 9)) for _ in range(16)),
+        "cardHolder": f"{faker.first_name()} {faker.last_name()}",
+        "expirationDate": '/'.join(str(random.randint(1, 24)) for _ in range(2)),
+        "securityCode": ''.join(str(random.randint(0, 9)) for _ in range(3))
+
     }
 
 @pytest.fixture()
