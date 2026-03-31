@@ -80,6 +80,9 @@ class TestAuthNegative:
     ])
 
     def test_negative_auth(self, api_manager_auth: ApiManagerAuth, registered_user, field_auth, value_auth):
+        """
+            Негативные тесты на авторизацию.
+        """
         login_data = {
             "email": registered_user["email"],
             "password": registered_user["password"]
