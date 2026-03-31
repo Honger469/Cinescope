@@ -1,11 +1,28 @@
 import pytest
 from tests.api.api_manager import ApiManagerMovies
 class TestMoviesAPI:
-    def test_get_poster(self, api_manager_movies: ApiManagerMovies, test_poster):
+    @pytest.mark.parametrize("field, value", [
+        ("Default", True),  #  Не отправляем ничего
+        ("page", "MISSING"),  # Не отправляем page
+        ("pageSize", "1"),  # Граничное значение
+        ("minPrice", "1"),  # Граничное значение
+        ("maxPrice", 1),  # Граничное значение
+        ("genreId", 1)  # Граничное значение
+    ])
+    def test_get_poster(self, api_manager_movies: ApiManagerMovies, test_poster, field, value):
         """
                 Тест на получение афиши.
         """
-        response = api_manager_movies.movies_api.get_poster_movie(test_poster)
+        if field == "Default":  # Сервер подставит значения по умолчанию
+            data = {}
+        else:
+            data = test_poster
+            if value == "MISSING":  #  Не отправляем этот ключ
+                data.pop(field, None)  # удаляем ключ из словаря
+            else:
+                data[field] = value  # изменяем или оставляем None
+
+        response = api_manager_movies.movies_api.get_poster_movie(data)
         response_data = response.json()
 
         # Проверки
@@ -14,6 +31,7 @@ class TestMoviesAPI:
 
         # Сначала делаем logout
         api_manager_movies.auth_api.logout()  # выход из аккаунта
+        
         # Если хотим проверить хотя бы один фильм:
         if response_data["movies"]:
             assert "id" in response_data["movies"][0], "ID фильма отсутствует в ответе"
@@ -24,24 +42,32 @@ class TestMoviesAPI:
         assert "page" in response_data, "Ключ page отсутствуют в ответе"
         assert "pageSize" in response_data, "Ключ pageSize отсутствуют в ответе"
 
-'''
-                        Негативные тесты:
-'''
+"""
+                     Негативные тесты:
+"""
 class TestMoviesAPINegative:
-    @pytest.mark.parametrize("field, value", [
-        ("pageSize", "21"),  # некорректное количество страниц
-        ("page", 21),  # некорректный номер страницы
-        ("minPrice", 10000)  # минимальная цена больше максимальной цены
+    @pytest.mark.parametrize("field_negative, value_negative", [
+        ("page", 0),  # Невалидные граничные значения
+        ("pageSize", 0),   # Невалидные граничные значения
+        ("pageSize", 21),  # Невалидные граничные значения
+        ("minPrice", 0),  #  Невалидные граничные значения
+        ("maxPrice", 0),  # Невалидные граничные значения
+        ("minPrice ", 10000),  #  minPrice > maxPrice
+        ("page ", "abc"),  #  Невалидные значения
+        ("pageSize ", "abc"),  #  Невалидные значения
+        ("minPrice ", "abc"),  #  Невалидные значения
+        ("maxPrice ", "abc"),  #  Невалидные значения
+        ("genreId", "abc")  #  Невалидные значения
     ])
-    def test_get_poster_negative(self, api_manager_movies: ApiManagerMovies, test_poster, field, value):
+    def test_get_poster_negative(self, api_manager_movies: ApiManagerMovies, test_poster,
+                                 field_negative, value_negative, expected_status = 400):
         data = test_poster
 
-        if value == "MISSING":
-            data.pop(field, None)  # удаляем ключ из словаря
+        if value_negative == "MISSING":
+            data.pop(field_negative, None)  # удаляем ключ из словаря
         else:
-            data[field] = value  # изменяем или оставляем None
+            data[field_negative] = value_negative  # изменяем или оставляем None
 
-        print(f"\nНегативный тест. Проверка поля {field}={value}")
+        print(f"\nНегативный тест. Проверка поля {field_negative}={value_negative}")
 
-        expected_status = 400  # Важно! Ожидаемый статус-код
         api_manager_movies.movies_api.get_poster_movie(data, expected_status)

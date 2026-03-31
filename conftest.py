@@ -1,7 +1,7 @@
 from faker import Faker
 import pytest
 import requests
-from constants import REGISTER_ENDPOINT, BASE_URL_AUTH
+from constants import REGISTER_ENDPOINT, BASE_URL_AUTH, SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD
 from custom_requester.custom_requester import CustomRequester
 from tests.api.api_manager import ApiManagerAuth, ApiManagerMovies
 from utils.data_generator import DataGenerator
@@ -53,8 +53,8 @@ def admin_api(api_manager_auth):
     """
     Аутентификация под админом для получения нужных прав, если они нужны для теста
     """
-    admin_email = "api1@gmail.com"
-    admin_password = "asdqwe123Q"
+    admin_email = SUPER_ADMIN_EMAIL
+    admin_password = SUPER_ADMIN_PASSWORD
 
     api_manager_auth.auth_api.authenticate(admin_email, admin_password)
     return api_manager_auth

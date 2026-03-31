@@ -2,6 +2,10 @@
 BASE_URL_AUTH = "https://auth.dev-cinescope.coconutqa.ru"
 BASE_URL_MOVIES = "https://api.dev-cinescope.coconutqa.ru"
 
+# Креды SUPER_ADMIN
+SUPER_ADMIN_EMAIL = "api1@gmail.com"
+SUPER_ADMIN_PASSWORD = "asdqwe123Q"
+
 HEADERS = {
     "Content-Type": "application/json",
     "Accept": "application/json"
