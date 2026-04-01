@@ -3,6 +3,7 @@ from tests.api.api_manager import ApiManagerAuth
 import logging
 
 logger = logging.getLogger(__name__)
+MISSING = object()
 
 
 # ----------------------------
@@ -53,14 +54,14 @@ class TestAuthNegative:
     @pytest.mark.parametrize("field_register, value_register", [
         ("email", "abc"),         # некорректный email
         ("fullName", ""),         # пустая строка
-        ("password", "MISSING")   # ключ есть, но значение None
+        ("password", MISSING)   # ключ есть, но значение None
     ])
     def test_negative_register(self, api_manager_auth: ApiManagerAuth, test_user, field_register, value_register):
         # Регистрация пользователя
         logger.info(f"Негативный тест. Регистрация пользователя. Проверка поля {field_register}={value_register}")
 
         data = test_user.copy()
-        if value_register == "MISSING":
+        if value_register is MISSING:
             data.pop(field_register, None)
         else:
             data[field_register] = value_register
@@ -83,7 +84,7 @@ class TestAuthNegative:
             "password": registered_user["password"]
         }
 
-        if value_auth == "MISSING":
+        if value_auth is MISSING:
             login_data.pop(field_auth, None)
         else:
             login_data[field_auth] = value_auth

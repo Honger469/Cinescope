@@ -5,6 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 fake = Faker("ru_RU")
+MISSING = object()
 
 
 # ----------------------------
@@ -61,7 +62,7 @@ class TestMoviesAPI:
 
     @pytest.mark.parametrize("field_get, value_get", [
         ("Default", True),  # Не отправляем ничего
-        ("page", "MISSING"),# Не отправляем page
+        ("page", MISSING),# Не отправляем page
         ("pageSize", 1),    # Граничное значение
         ("minPrice", 1),    # Граничное значение
         ("maxPrice", 2),    # Граничное значение
@@ -75,7 +76,7 @@ class TestMoviesAPI:
             data = {}
         else:
             data = test_poster.copy()
-            if value_get == "MISSING":
+            if value_get is MISSING:
                 data.pop(field_get, None)
             else:
                 data[field_get] = value_get
@@ -111,14 +112,14 @@ class TestMoviesAPINegative:
     @pytest.mark.parametrize("field_create_negative, value_create_negative", [
         ("not_access", True),
         ("name", ""),
-        ("name", "MISSING")
+        ("name", MISSING)
     ])
     def test_create_movie(self, admin_api, test_movie, api_manager_movies, field_create_negative,value_create_negative):
         # Создание фильма
         logger.info(f"Негативный тест. Создание фильма. Проверка поля {field_create_negative}={value_create_negative}")
 
         data = test_movie.copy()
-        if value_create_negative == "MISSING":
+        if value_create_negative is MISSING:
             data.pop(field_create_negative, None)
         else:
             data[field_create_negative] = value_create_negative
