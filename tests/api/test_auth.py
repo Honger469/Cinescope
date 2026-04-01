@@ -75,7 +75,7 @@ class TestAuthNegative:
         ("email", "abc"),  # некорректный email
         ("email", ""),     # пустая строка
         ("password", "1"), # неверный пароль
-        ("password", "")  # пустая строка
+        ("password", "")  # пустая строка
     ])
     def test_negative_auth(self, api_manager_auth: ApiManagerAuth, registered_user, field_auth, value_auth):
         # Авторизация пользователя
