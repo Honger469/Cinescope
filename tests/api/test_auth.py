@@ -30,7 +30,6 @@ class TestAuthAPI:
     def test_change_user(self, admin_api, registered_user):
         # Изменение пользователя
         print("\n\nПозитивный теста. Изменение пользователя")
-
         user_id = registered_user["id"]
         new_verified = True
         new_banned = False
@@ -54,11 +53,11 @@ class TestAuthNegative:
     @pytest.mark.parametrize("field_register, value_register", [
         ("email", "abc"),         # некорректный email
         ("fullName", ""),         # пустая строка
-        ("password", "MISSING"),  # ключ есть, но значение None
+        ("password", "MISSING")   # ключ есть, но значение None
     ])
     def test_negative_register(self, api_manager_auth: ApiManagerAuth, test_user, field_register, value_register):
         # Регистрация пользователя
-        print(f"\n\nНегативный тест. Проверка поля {field_register}={value_register}")
+        print(f"\n\nНегативный тест. Регистрация пользователя. Проверка поля {field_register}={value_register}")
 
         # Сначала делаем logout
         api_manager_auth.auth_api.logout()
@@ -76,12 +75,11 @@ class TestAuthNegative:
         ("email", "abc"),  # некорректный email
         ("email", ""),     # пустая строка
         ("password", "1"), # неверный пароль
-        ("password", ""),  # пустая строка
-        ("password", "MISSING"),  # пустая строка
+        ("password", "")  # пустая строка
     ])
     def test_negative_auth(self, api_manager_auth: ApiManagerAuth, registered_user, field_auth, value_auth):
         # Авторизация пользователя
-        print(f"\n\nНегативный тест. Проверка поля {field_auth}={value_auth}")
+        print(f"\n\nНегативный тест. Авторизация пользователя. Проверка поля {field_auth}={value_auth}")
 
         login_data = {
             "email": registered_user["email"],

@@ -111,9 +111,9 @@ class TestMoviesAPINegative:
         ("name", ""),
         ("name", "MISSING")
     ])
-    def test_create_movie(self, admin_api, test_movie, api_manager_movies, field_create_negative, value_create_negative):
+    def test_create_movie(self, admin_api, test_movie, api_manager_movies, field_create_negative,value_create_negative):
         # Создание фильма
-        print(f"\n\nНегативный тест. Проверка поля {field_create_negative}={value_create_negative}")
+        print(f"\n\nНегативный тест. Создание фильма. Проверка поля {field_create_negative}={value_create_negative}")
 
         data = test_movie
         if value_create_negative == "MISSING":
@@ -146,13 +146,10 @@ class TestMoviesAPINegative:
     def test_get_poster_negative(self, api_manager_movies: ApiManagerMovies, test_poster,
                                  field_negative, value_negative):
         # Получение афиши с фильмами
-        print(f"\n\nНегативный тест. Проверка поля {field_negative}={value_negative}")
+        print(f"\n\nНегативный тест. Получение афиши с фильмами. Проверка поля {field_negative}={value_negative}")
 
         data = test_poster.copy()
-        if value_negative == "MISSING":
-            data.pop(field_negative, None)
-        else:
-            data[field_negative] = value_negative
+        data[field_negative] = value_negative
 
         expected_status = 400
         api_manager_movies.movies_api.get_poster_movie(data, expected_status)
