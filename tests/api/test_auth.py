@@ -79,7 +79,7 @@ class TestAuthNegative:
     ])
     def test_negative_auth(self, api_manager_auth: ApiManagerAuth, registered_user, field_auth, value_auth):
         # Авторизация пользователя
-        print(f"\n\nНегативный тест. Авторизация cпользователя. Проверка поля {field_auth}={value_auth}")
+        print(f"\n\nНегативный тест. Авторизация пользователя. Проверка поля {field_auth}={value_auth}")
 
         login_data = {
             "email": registered_user["email"],
