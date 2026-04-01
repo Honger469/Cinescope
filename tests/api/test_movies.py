@@ -1,0 +1,155 @@
+import pytest
+from tests.api.api_manager import ApiManagerMovies
+from faker import Faker
+
+fake = Faker("ru_RU")
+
+
+# ----------------------------
+# Позитивные тесты
+# ----------------------------
+
+
+class TestMoviesAPI:
+
+    def test_create_movie(self, admin_api, test_movie, api_manager_movies):
+        # Создание фильма
+        print("\n\nПозитивный тест. Создание фильма")
+
+        data = test_movie
+        response = api_manager_movies.movies_api.create_movie(data)
+        response_created = response.json()
+        assert "id" in response_created
+        assert "name" in response_created
+        assert "price" in response_created
+        assert "description" in response_created
+
+    def test_get_one_movie(self, api_manager_movies, movie):
+        # Получение фильма
+        print("\n\nПозитивный тест. Получение фильма")
+
+        response = api_manager_movies.movies_api.get_movie(movie["id"])
+        response_got = response.json()
+        assert "id" in response_got
+        assert "name" in response_got
+        assert "price" in response_got
+        assert "description" in response_got
+
+    def test_change_movie(self, admin_api, api_manager_movies, movie):
+        # Редактирование фильма
+        print("\n\nПозитивный тест. Редактирование фильма")
+
+        data = movie
+        data["name"] = fake.sentence(nb_words=3)
+        data["description"] = fake.sentence(nb_words=8)
+        response = api_manager_movies.movies_api.change_movie(movie["id"], data)
+        response_changed = response.json()
+
+        assert "id" in response_changed
+        assert "price" in response_changed
+        assert response_changed["name"] == data["name"]
+        assert response_changed["description"] == data["description"]
+
+    def test_delete_movie(self, admin_api, api_manager_movies, movie):
+        # Удаление фильма
+        print("\n\nПозитивный тест. Удаление фильма")
+        api_manager_movies.movies_api.delete_movie(movie["id"])
+        api_manager_movies.movies_api.get_movie(movie["id"], 404)
+
+
+    @pytest.mark.parametrize("field_get, value_get", [
+        ("Default", True),  # Не отправляем ничего
+        ("page", "MISSING"),# Не отправляем page
+        ("pageSize", 1),    # Граничное значение
+        ("minPrice", 1),    # Граничное значение
+        ("maxPrice", 2),    # Граничное значение
+        ("genreId", 1)      # Граничное значение
+    ])
+    def test_get_poster(self, api_manager_movies: ApiManagerMovies, test_poster, field_get, value_get):
+        # Получение афиши с фильмами
+        print(f"\n\nПозитивный тест. Получение афиши. Проверка поля {field_get}={value_get}")
+
+        if field_get == "Default":
+            data = {}
+        else:
+            data = test_poster.copy()
+            if value_get == "MISSING":
+                data.pop(field_get, None)
+            else:
+                data[field_get] = value_get
+
+            if data.get("minPrice", 0) > data.get("maxPrice", 0):
+                data["minPrice"] = data["maxPrice"] - 1
+
+        response = api_manager_movies.movies_api.get_poster_movie(data)
+        response_data = response.json()
+
+        # Проверки
+        assert "movies" in response_data
+        assert "pageCount" in response_data
+        assert "count" in response_data
+        assert "page" in response_data
+        assert "pageSize" in response_data
+
+        api_manager_movies.auth_api.logout()
+
+        if response_data["movies"]:
+            assert "id" in response_data["movies"][0]
+        else:
+            print("Список фильмов пуст на этой странице")
+
+
+# ----------------------------
+# Негативные тесты
+# ----------------------------
+
+
+class TestMoviesAPINegative:
+
+    @pytest.mark.parametrize("field_create_negative, value_create_negative", [
+        ("not_access", True),
+        ("name", ""),
+        ("name", "MISSING")
+    ])
+    def test_create_movie(self, admin_api, test_movie, api_manager_movies, field_create_negative,value_create_negative):
+        # Создание фильма
+        print(f"\n\nНегативный тест. Создание фильма. Проверка поля {field_create_negative}={value_create_negative}")
+
+        data = test_movie
+        if value_create_negative == "MISSING":
+            data.pop(field_create_negative, None)
+        else:
+            data[field_create_negative] = value_create_negative
+
+        expected_status = 400
+        if field_create_negative == "not_access":
+            api_manager_movies.auth_api.logout()
+            expected_status = 401
+
+        api_manager_movies.movies_api.create_movie(data, expected_status)
+
+
+    @pytest.mark.parametrize("field_negative, value_negative", [
+        ("page", 0),        # Невалидные граничные значения
+        ("page", 0),        # Невалидные граничные значения
+        ("pageSize", 0),    # Невалидные граничные значения
+        ("pageSize", 21),   # Невалидные граничные значения
+        ("minPrice", 0),    # Невалидные граничные значения
+        ("maxPrice", 1),    # Невалидные граничные значения
+        ("minPrice", 10000),# minPrice > maxPrice
+        ("page", "abc"),    # Невалидные значения
+        ("pageSize", "abc"),# Невалидные значения
+        ("minPrice", "abc"),# Невалидные значения
+        ("maxPrice", "abc"),# Невалидные значения
+        ("genreId", "abc")  # Невалидные значения
+    ])
+    def test_get_poster_negative(self, api_manager_movies: ApiManagerMovies, test_poster,
+                                 field_negative, value_negative):
+        # Получение афиши с фильмами
+        print(f"\n\nНегативный тест. Получение афиши с фильмами. Проверка поля {field_negative}={value_negative}")
+
+        data = test_poster.copy()
+        data[field_negative] = value_negative
+
+        expected_status = 400
+        api_manager_movies.movies_api.get_poster_movie(data, expected_status)
