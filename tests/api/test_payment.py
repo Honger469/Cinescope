@@ -1,4 +1,8 @@
 from tests.api.api_manager import ApiManagerPayment
+from faker import Faker
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 # ----------------------------
@@ -8,11 +12,11 @@ from tests.api.api_manager import ApiManagerPayment
 
 class TestPaymentAPI:
 
-    def test_get_user_payment(self, admin_api, api_manager_payment:ApiManagerPayment):
+    def test_get_user_payment(self, admin_api, registered_user, api_manager_payment:ApiManagerPayment):
         # Получение платежей пользователя
-        print("\n\nПозитивный тест. Получение платежей пользователя")
+        logger.info("Позитивный тест. Получение платежей пользователя")
 
-        user_id = "0bfbe544-2f80-472f-af9b-b7986490a3d7"
+        user_id = registered_user["id"]
         response = api_manager_payment.payment_api.get_user_id_payment(user_id)
         response_data = response.json()
 
@@ -26,5 +30,5 @@ class TestPaymentAPI:
             assert "total" in response_data[0]
             assert "createdAt" in response_data[0]
         else:
-            print("Оплат не найдено")
+            logger.info("Оплат не найдено")
 

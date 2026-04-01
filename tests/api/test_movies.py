@@ -1,7 +1,9 @@
 import pytest
 from tests.api.api_manager import ApiManagerMovies
 from faker import Faker
+import logging
 
+logger = logging.getLogger(__name__)
 fake = Faker("ru_RU")
 
 
@@ -14,7 +16,7 @@ class TestMoviesAPI:
 
     def test_create_movie(self, admin_api, test_movie, api_manager_movies):
         # Создание фильма
-        print("\n\nПозитивный тест. Создание фильма")
+        logger.info("Позитивный тест. Создание фильма")
 
         data = test_movie
         response = api_manager_movies.movies_api.create_movie(data)
@@ -26,7 +28,7 @@ class TestMoviesAPI:
 
     def test_get_one_movie(self, api_manager_movies, movie):
         # Получение фильма
-        print("\n\nПозитивный тест. Получение фильма")
+        logger.info("Позитивный тест. Получение фильма")
 
         response = api_manager_movies.movies_api.get_movie(movie["id"])
         response_got = response.json()
@@ -37,9 +39,9 @@ class TestMoviesAPI:
 
     def test_change_movie(self, admin_api, api_manager_movies, movie):
         # Редактирование фильма
-        print("\n\nПозитивный тест. Редактирование фильма")
+        logger.info("Позитивный тест. Редактирование фильма")
 
-        data = movie
+        data = movie.copy()
         data["name"] = fake.sentence(nb_words=3)
         data["description"] = fake.sentence(nb_words=8)
         response = api_manager_movies.movies_api.change_movie(movie["id"], data)
@@ -52,7 +54,7 @@ class TestMoviesAPI:
 
     def test_delete_movie(self, admin_api, api_manager_movies, movie):
         # Удаление фильма
-        print("\n\nПозитивный тест. Удаление фильма")
+        logger.info("Позитивный тест. Удаление фильма")
         api_manager_movies.movies_api.delete_movie(movie["id"])
         api_manager_movies.movies_api.get_movie(movie["id"], 404)
 
@@ -67,7 +69,7 @@ class TestMoviesAPI:
     ])
     def test_get_poster(self, api_manager_movies: ApiManagerMovies, test_poster, field_get, value_get):
         # Получение афиши с фильмами
-        print(f"\n\nПозитивный тест. Получение афиши. Проверка поля {field_get}={value_get}")
+        logger.info(f"Позитивный тест. Получение афиши. Проверка поля {field_get}={value_get}")
 
         if field_get == "Default":
             data = {}
@@ -96,7 +98,7 @@ class TestMoviesAPI:
         if response_data["movies"]:
             assert "id" in response_data["movies"][0]
         else:
-            print("Список фильмов пуст на этой странице")
+            logger.info("Список фильмов пуст на этой странице")
 
 
 # ----------------------------
@@ -113,9 +115,9 @@ class TestMoviesAPINegative:
     ])
     def test_create_movie(self, admin_api, test_movie, api_manager_movies, field_create_negative,value_create_negative):
         # Создание фильма
-        print(f"\n\nНегативный тест. Создание фильма. Проверка поля {field_create_negative}={value_create_negative}")
+        logger.info(f"Негативный тест. Создание фильма. Проверка поля {field_create_negative}={value_create_negative}")
 
-        data = test_movie
+        data = test_movie.copy()
         if value_create_negative == "MISSING":
             data.pop(field_create_negative, None)
         else:
@@ -146,7 +148,7 @@ class TestMoviesAPINegative:
     def test_get_poster_negative(self, api_manager_movies: ApiManagerMovies, test_poster,
                                  field_negative, value_negative):
         # Получение афиши с фильмами
-        print(f"\n\nНегативный тест. Получение афиши с фильмами. Проверка поля {field_negative}={value_negative}")
+        logger.info(f"Негативный тест. Получение афиши с фильмами. Проверка поля {field_negative}={value_negative}")
 
         data = test_poster.copy()
         data[field_negative] = value_negative

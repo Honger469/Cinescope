@@ -135,6 +135,9 @@ def authorized_user(api_manager_auth, registered_user):
     )
     return registered_user
 
+@pytest.fixture(autouse=True)
+def logout_before_test(api_manager_auth):
+    api_manager_auth.auth_api.logout()
 
 # ----------------------------
 # Регистрация пользователя
