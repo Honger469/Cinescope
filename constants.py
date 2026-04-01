@@ -1,4 +1,4 @@
-# constants.py
+# constants.pyd
 BASE_URL_AUTH = "https://auth.dev-cinescope.coconutqa.ru"
 BASE_URL_MOVIES = "https://api.dev-cinescope.coconutqa.ru"
 BASE_URL_PAYMENT = "https://payment.dev-cinescope.coconutqa.ru"
