@@ -10,8 +10,8 @@ from tests.api.api_manager import ApiManagerAuth
 class TestAuthAPI:
 
     def test_register_and_login_user(self, api_manager_auth: ApiManagerAuth, registered_user):
-        """Позитивный тест на регистрацию и авторизацию пользователя."""
-        print("\n\nПозитивный теста на регистрацию и авторизацию пользователя")
+        # Регистрация и авторизация пользователя
+        print("\n\nПозитивный тест на регистрацию и авторизацию пользователя")
         login_data = {
             "email": registered_user["email"],
             "password": registered_user["password"]
@@ -28,7 +28,9 @@ class TestAuthAPI:
         assert response_data["user"]["email"] == registered_user["email"], "Email не совпадает"
 
     def test_change_user(self, admin_api, registered_user):
-        """Позитивный тест на изменение пользователя."""
+        # Изменение пользователя
+        print("\n\nПозитивный теста. Изменение пользователя")
+
         user_id = registered_user["id"]
         new_verified = True
         new_banned = False
@@ -55,7 +57,9 @@ class TestAuthNegative:
         ("password", "MISSING"),  # ключ есть, но значение None
     ])
     def test_negative_register(self, api_manager_auth: ApiManagerAuth, test_user, field_register, value_register):
-        """Негативный тест на регистрацию пользователя."""
+        # Регистрация пользователя
+        print(f"\n\nНегативный тест. Проверка поля {field_register}={value_register}")
+
         # Сначала делаем logout
         api_manager_auth.auth_api.logout()
 
@@ -65,7 +69,6 @@ class TestAuthNegative:
         else:
             data[field_register] = value_register
 
-        print(f"\n\nНегативный тест. Проверка поля {field_register}={value_register}")
         expected_status = 400
         api_manager_auth.auth_api.register_user(data, expected_status)
 
@@ -74,9 +77,12 @@ class TestAuthNegative:
         ("email", ""),     # пустая строка
         ("password", "1"), # неверный пароль
         ("password", ""),  # пустая строка
+        ("password", "MISSING"),  # пустая строка
     ])
     def test_negative_auth(self, api_manager_auth: ApiManagerAuth, registered_user, field_auth, value_auth):
-        """Негативный тест на авторизацию пользователя."""
+        # Авторизация пользователя
+        print(f"\n\nНегативный тест. Проверка поля {field_auth}={value_auth}")
+
         login_data = {
             "email": registered_user["email"],
             "password": registered_user["password"]
@@ -87,7 +93,6 @@ class TestAuthNegative:
         else:
             login_data[field_auth] = value_auth
 
-        print(f"\n\nДалее негативный тест. Проверка поля {field_auth}={value_auth}")
         expected_status = 401
 
         # Сначала делаем logout
@@ -96,8 +101,9 @@ class TestAuthNegative:
         api_manager_auth.auth_api.login_user(login_data, expected_status)
 
     def test_negative_change_user(self, api_manager_auth, authorized_user, registered_user):
-        """Негативный тест на изменение пользователя без соответствующих прав."""
+        # Попытка изменения пользователя без соответствующих прав
         print("\n\nНегативный тест. Попытка изменения пользователя без соответствующих прав")
+
         user_id = registered_user["id"]
         new_data = {"verified": True, "banned": False}
         api_manager_auth.user_api.change_user(user_id, new_data, expected_status=403)
