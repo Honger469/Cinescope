@@ -4,7 +4,7 @@ import random
 from faker import Faker
 import pytest
 import requests
-from constants import REGISTER_ENDPOINT, BASE_URL_AUTH
+from constants import REGISTER_ENDPOINT, BASE_URL_AUTH, BASE_URL_MOVIES, MOVIE_ENDPOINT
 from custom_requester.custom_requester import CustomRequester
 from tests.api.api_manager import ApiManagerAuth, ApiManagerMovies, ApiManagerPayment
 from utils.data_generator import DataGenerator
@@ -28,10 +28,9 @@ def session():
 
 
 @pytest.fixture(scope="session")
-def requester():
+def requester(session):
     """Фикстура для создания экземпляра CustomRequester."""
-    session_obj = requests.Session()
-    return CustomRequester(session=session_obj)
+    return CustomRequester(session)
 
 
 @pytest.fixture(scope="session")
@@ -97,6 +96,22 @@ def test_poster():
         "published": True,
         "genreId": random.randint(1, 5)
     }
+
+
+@pytest.fixture()
+def movie(admin_api, requester, test_movie):
+    """Создание фильма для использования в тесте."""
+    response = requester.send_request(
+        method="POST",
+        base_url=BASE_URL_MOVIES,
+        endpoint=MOVIE_ENDPOINT,
+        data=test_movie,
+        expected_status=201
+    )
+    response_data = response.json()
+    movie_created = test_movie.copy()
+    movie_created["id"] = response_data["id"]
+    return movie_created
 
 
 # ----------------------------

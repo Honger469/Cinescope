@@ -24,19 +24,6 @@ class DataGenerator:
         - Допустимые символы.
         - Длина от 8 до 20 символов.
         """
-        # # Гарантируем наличие хотя бы одной буквы и одной цифры
-        # letters = random.choice(string.ascii_letters)  # Одна буква
-        # digits = random.choice(string.digits)  # Одна цифра
-        #
-        # # Дополняем пароль случайными символами из допустимого набора
-        # special_chars = "?@#$%^&*|:"
-        # all_chars = string.ascii_letters + string.digits + special_chars
-        # remaining_length = random.randint(6, 18)  # Остальная длина пароля
-        # remaining_chars = ''.join(random.choices(all_chars, k=remaining_length))
-        #
-        # # Перемешиваем пароль для рандомизации
-        # password = list(letters + digits + remaining_chars)
-        # random.shuffle(password)
 
         upper = random.choice(string.ascii_uppercase)
         lower = random.choice(string.ascii_lowercase)

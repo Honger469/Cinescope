@@ -12,9 +12,9 @@ fake = Faker("ru_RU")
 
 class TestMoviesAPI:
 
-    def test_create_get_delete_movie(self, admin_api, test_movie, api_manager_movies):
+    def test_create_movie(self, admin_api, test_movie, api_manager_movies):
         """Позитивный тест на создание, получение и удаление фильма."""
-        print("\n\nПозитивный тест. Создание, получение, удаление фильма")
+        print("\n\nПозитивный тест. Создание фильма")
 
         # Создание фильма
         data = test_movie
@@ -43,9 +43,13 @@ class TestMoviesAPI:
         assert response_changed["name"] == data["name"]
         assert response_changed["description"] == data["description"]
 
+
+    def test_delete_movie(self, admin_api, api_manager_movies, movie):
         # Удаление фильма
-        api_manager_movies.movies_api.delete_movie(response_created["id"])
-        api_manager_movies.movies_api.get_movie(response_created["id"], 404)
+        print("\n\nПозитивный тест. Удаление фильма")
+        api_manager_movies.movies_api.delete_movie(movie["id"])
+        api_manager_movies.movies_api.get_movie(movie["id"], 404)
+
 
     @pytest.mark.parametrize("field_get, value_get", [
         ("Default", True),  # Не отправляем ничего
@@ -117,6 +121,7 @@ class TestMoviesAPINegative:
             expected_status = 401
 
         api_manager_movies.movies_api.create_movie(data, expected_status)
+
 
     @pytest.mark.parametrize("field_negative, value_negative", [
         ("page", 0),        # Невалидные граничные значения
