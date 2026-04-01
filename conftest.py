@@ -135,14 +135,15 @@ def authorized_user(api_manager_auth, registered_user):
     )
     return registered_user
 
+
 @pytest.fixture(autouse=True)
 def logout_before_test(api_manager_auth):
-    """Автоматический logout перед каждым тестом."""
-    try:
+    """Автоматический logout перед каждым тестом, только если пользователь залогинен."""
+    auth_headers = api_manager_auth.auth_api.headers
+    session_headers = getattr(api_manager_auth.session, "headers", {})
+
+    if "authorization" in auth_headers or "authorization" in session_headers:
         api_manager_auth.auth_api.logout()
-    except (requests.exceptions.RequestException, ValueError):
-        # Игнорируем ошибки сетевого запроса или неожиданный статус
-        pass
 
 # ----------------------------
 # Регистрация пользователя

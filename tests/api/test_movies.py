@@ -62,7 +62,7 @@ class TestMoviesAPI:
 
     @pytest.mark.parametrize("field_get, value_get", [
         ("Default", True),  # Не отправляем ничего
-        ("page", MISSING),# Не отправляем page
+        ("page", MISSING),  # Не отправляем page
         ("pageSize", 1),    # Граничное значение
         ("minPrice", 1),    # Граничное значение
         ("maxPrice", 2),    # Граничное значение
