@@ -4,7 +4,7 @@
 
 ## Структура проекта
 
-- `conftest.py` — конфигурация для тестов (pytest).  
+- `conftest.py` — конфигурация для тестов (pytest.  
 - `constants.py` — константы проекта.  
 - `test_API.py` — примеры тестов API.  
 - `requirements.txt` — зависимости проекта.  
